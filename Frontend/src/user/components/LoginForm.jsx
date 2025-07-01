@@ -44,12 +44,12 @@ export const LoginForm = ({role}) => {
             </div>
           </div>
           <div className='flex items-center w-full mx-auto'>
-            <button type="submit" className='bg-green-600 text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-90 hover:scale-[1.02] transition-transform duration-600'>Login</button>
+            <button type="submit" className='bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-90 hover:scale-[1.02] transition-transform duration-600'>Login</button>
           </div>
         </form>
         <div className='flex items-center gap-2'>
           <p className='text-md'>Don't have an account?</p>
-          <a href="/register" className='text-green-500'>Register</a>
+          <a href={`${role}-register`} className='text-primary'>Register</a>
         </div>
       </div>
   )

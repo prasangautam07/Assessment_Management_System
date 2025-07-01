@@ -3,6 +3,7 @@
 @theme {
   --color-background: #edede9;
   --color-foreground: #edf6f9;
+  --color-primary: #1ab394;
 }
 
 @layer base {
@@ -10,18 +11,16 @@
     @apply scroll-smooth;
   }
 
-  body {
+  /* body {
     @apply bg-background transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
+  } */
 }
 
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
   margin-top: 10rem;
-
-  
 
   @media (width >= 640px) {
     max-width: 640px;
@@ -37,6 +36,27 @@
   }
   @media (width >= 1400px) {
     max-width: 1400px;
+  }
+}
+@utility container-large {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  margin-top: 7rem;
+
+  @media (width >= 640px) {
+    max-width: 640px;
+  }
+  @media (width >= 768px) {
+    max-width: 768px;
+  }
+  @media (width >= 1024px) {
+    max-width: 1024px;
+  }
+  @media (width >= 1280px) {
+    max-width: 1580px;
+  }
+  @media (width >= 1400px) {
+    width: 700px;
   }
 }
 
@@ -61,4 +81,9 @@
   margin: 0 auto;
   padding: 0;
   text-align: center;
+  font-family: sans-serif;
+ 
+}
+body{
+  background-color: aliceblue;
 }

@@ -70,12 +70,12 @@ export const RegisterForm = ({role}) => {
             </div>
           </div>
           <div className='flex items-center w-full mx-auto'>
-            <button type="submit" className='bg-blue-500 text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:bg-blue-400 hover:scale-[1.02] transition-transform duration-600'>Login</button>
+            <button type="submit" className='bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-80 hover:scale-[1.02] transition-transform duration-600'>Login</button>
           </div>
         </form>
         <div className='flex items-center gap-2'>
           <p className='text-md'>Already have an Account?</p>
-          <a href="/login" className='text-blue-500'>Login</a>
+          <a href={`${role}-login`} className='text-primary'>Login</a>
         </div>
       </div>
   )
