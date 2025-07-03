@@ -75,7 +75,7 @@ export const RegisterForm = ({role}) => {
         </form>
         <div className='flex items-center gap-2'>
           <p className='text-md'>Already have an Account?</p>
-          <a href={`${role}-login`} className='text-primary'>Login</a>
+          <a href={`/${role}/login`} className='text-primary'>Login</a>
         </div>
       </div>
   )

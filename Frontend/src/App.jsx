@@ -1,9 +1,9 @@
-import  {PagesRoutes}  from "./Routes"
+import { PagesRoutes } from "./routes/Routes.jsx";
 function App() {
 
   return (
     <>
-      < PagesRoutes/>
+        <PagesRoutes />
     </>
   )
 }

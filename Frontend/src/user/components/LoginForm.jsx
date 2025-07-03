@@ -49,7 +49,7 @@ export const LoginForm = ({role}) => {
         </form>
         <div className='flex items-center gap-2'>
           <p className='text-md'>Don't have an account?</p>
-          <a href={`${role}-register`} className='text-primary'>Register</a>
+          <a href={`/${role}/register`} className='text-primary'>Register</a>
         </div>
       </div>
   )

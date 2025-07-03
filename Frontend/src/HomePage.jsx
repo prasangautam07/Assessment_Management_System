@@ -21,11 +21,11 @@ export const HomePage = () => {
             <div className='container flex flex-col items-center justify-center mt-4'>
                 <p className='text-2xl text-[#090D4C] font-semibold mt-2'>Please Choose Your Role</p>
                 <div className='flex items-center justify-center gap-20 mt-4 mb-4 p-4 rounded-md'>
-                    <NavLink to="/student-login" className='flex flex-col items-center bg-[#e5f2f8] p-4 rounded-md card-shadow hover:opacity-70 '>
+                    <NavLink to="/student/login" className='flex flex-col items-center bg-[#e5f2f8] p-4 rounded-md card-shadow hover:opacity-70 '>
                         <UserCircle className='text-primary w-8 h-8 ' />
                         <h1 className='text-[#090D4C] font-semibold text-[18px]'>Student</h1>
                     </NavLink>
-                    <NavLink to="/teacher-login" className='flex flex-col items-center bg-[#e5f2f8] p-4 rounded-md card-shadow hover:opacity-70'>
+                    <NavLink to="/teacher/login" className='flex flex-col items-center bg-[#e5f2f8] p-4 rounded-md card-shadow hover:opacity-70'>
                         <UserCircle className='text-primary w-8 h-8 ' />
                         <h1 className='text-[#090D4C] font-semibold text-[18px]'>Teacher</h1>
                     </NavLink>
