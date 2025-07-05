@@ -4,7 +4,7 @@ export const Profile = () => {
   return (
     <div className=" flex  justify-evenly gap-4 mt-10">
       <div className="flex flex-col gap-20  w-1/2 p-3">
-        <div className=" bg-white p-4 border-t-3 border-[#888888] card-shadow flex flex-col items-start">
+        <div className=" bg-white p-4 border-t-3 border-primary card-shadow flex flex-col items-start">
           <h1 className="font-normal text-[24px] text-[#787777]">
             Personal Information
           </h1>
@@ -17,7 +17,7 @@ export const Profile = () => {
             <p>Ethnicity : || Category : Regular</p>
           </div>
         </div>
-        <div className=" bg-white p-4 border-t-3 border-[#888888] card-shadow flex flex-col items-start">
+        <div className=" bg-white p-4 border-t-3 border-primary card-shadow flex flex-col items-start">
           <h1 className="font-normal text-[24px] text-[#787777]">
             Other Information
           </h1>
@@ -32,7 +32,7 @@ export const Profile = () => {
       </div>
       <div className="flex flex-col gap-13 w-1/2">
         <div className='flex items-center justify-evenly p-4 w-full gap-5'>
-          <div className="flex flex-col items-center bg-white card-shadow p-4 border-t-3 border-[#888888] w-1/2">
+          <div className="flex flex-col items-center bg-white card-shadow p-4 border-t-3 border-primary w-1/2">
             <img
               src="https://www.w3schools.com/howto/img_avatar.png"
               alt="Avatar"
@@ -51,7 +51,7 @@ export const Profile = () => {
             <p>Choose Sign to update</p>
           </div>
         </div>
-        <div className=" bg-white p-4 border-t-3 border-[#888888] card-shadow flex flex-col items-start">
+        <div className=" bg-white p-4 border-t-3 border-primary card-shadow flex flex-col items-start">
           <h1 className="font-normal text-[24px] text-[#787777]">
             Other Information
           </h1>
@@ -67,3 +67,4 @@ export const Profile = () => {
     </div>
   );
 };
+
