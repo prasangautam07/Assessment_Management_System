@@ -1,7 +1,8 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
-import { NavLink } from 'react-router-dom';
+
 
 export const LoginForm = ({role}) => {
     const [showPassword, setShowPassword] = useState(false);
