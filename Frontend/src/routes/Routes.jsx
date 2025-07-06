@@ -6,6 +6,7 @@ import { TeacherRegisterPage } from '../user/pages/TeacherRegisterPage'
 import { ProfilePage } from '../dashboard/pages/ProfilePage'
 import { DashboardLayout } from '../dashboard/pages/DashboardLayout'
 import { ResultsPage } from '../dashboard/pages/ResultsPage'
+import { ProtectedRoutes } from '../utils/ProtectedRoutes'
 import { HomePage } from '../HomePage'
 import { Route, Routes } from 'react-router-dom'
 export const PagesRoutes = () => {
@@ -16,11 +17,12 @@ export const PagesRoutes = () => {
       <Route path="/student/register" element={<StudentRegisterPage />} />
       <Route path="/teacher/login" element={<TeacherLoginPage />} />
       <Route path="/teacher/register" element={<TeacherRegisterPage />} />
-      <Route path="/dashboard" element={<DashboardLayout />} >
-        <Route index element={<ProfilePage />} />
-        <Route path="marks" element={<ResultsPage />} />
+      <Route element={<ProtectedRoutes/>}>
+        <Route path="/dashboard" element={<DashboardLayout />} >
+          <Route index element={<ProfilePage />} />
+          <Route path="marks" element={<ResultsPage />} />
+        </Route>
       </Route>
-
     </Routes>
   )
 }

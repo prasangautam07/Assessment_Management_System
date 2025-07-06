@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
+import { NavLink } from 'react-router-dom';
 
 export const LoginForm = ({role}) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -43,9 +44,9 @@ export const LoginForm = ({role}) => {
                 : <EyeOff size={20} onClick={() => setShowPassword(true)} className='cursor-pointer ml-2' />}
             </div>
           </div>
-          <div className='flex items-center w-full mx-auto'>
+          <NavLink to='/dashboard' className='flex items-center w-full mx-auto'>
             <button type="submit" className='bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-90 hover:scale-[1.02] transition-transform duration-600'>Login</button>
-          </div>
+          </NavLink>
         </form>
         <div className='flex items-center gap-2'>
           <p className='text-md'>Don't have an account?</p>
