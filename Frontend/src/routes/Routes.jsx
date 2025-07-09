@@ -2,7 +2,6 @@ import React from 'react'
 import { StudentLoginPage } from '../user/pages/StudentLoginPage'
 import { StudentRegisterPage } from '../user/pages/StudentRegisterPage'
 import { TeacherLoginPage } from '../user/pages/TeacherLoginPage'
-import { TeacherRegisterPage } from '../user/pages/TeacherRegisterPage'
 import { ProfilePage } from '../dashboard/pages/ProfilePage'
 import { DashboardLayout } from '../dashboard/pages/DashboardLayout'
 import { ResultsPage } from '../dashboard/pages/ResultsPage'
@@ -16,7 +15,6 @@ export const PagesRoutes = () => {
       <Route path="/student/login" element={<StudentLoginPage />} />
       <Route path="/student/register" element={<StudentRegisterPage />} />
       <Route path="/teacher/login" element={<TeacherLoginPage />} />
-      <Route path="/teacher/register" element={<TeacherRegisterPage />} />
       <Route element={<ProtectedRoutes/>}>
         <Route path="/dashboard" element={<DashboardLayout />} >
           <Route index element={<ProfilePage />} />

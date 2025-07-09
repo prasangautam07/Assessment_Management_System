@@ -1,17 +1,22 @@
-const express = require('express');
-const dotenv = require('dotenv').config();
-const cors = require('cors');
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import { swaggerUiMiddleware, swaggerDocs } from './swagger.js';
+import userRoutes from './routes/userroutes.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 app.use(express.json());
-app.use(cors({origin: 'http://localhost:5173'})); 
 
-const userRoutes = require('./routes/userroutes');
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST"]
+}))
+
+app.use('/api-docs', swaggerUiMiddleware, swaggerDocs);
 app.use('/api/users', userRoutes);
 
-const middleware = require('./middleware/errorhandler');
+import middleware from './middleware/errorhandler.js';
 app.use(middleware);
 
 

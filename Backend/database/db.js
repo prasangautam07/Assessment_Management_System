@@ -1,20 +1,33 @@
-require('dotenv').config({path: '../env'});
+import { Pool } from "pg";
 
-const {Pool} = require('pg');
+let pool = null;
 
-
-const pool = new Pool({
-    /* host : process.env.DB_HOST ,
-    user : process.env.DB_USER,
-    password : String(process.env.DB_PASSWORD),
-    database : process.env.DB_NAME,
-    port : process.env.DB_PORT,
-    max:100,  */
-
-    connectionString: 'postgresql://prasan:rrFjT8me1qBE19YUNWYTxBEcd9uHuOhL@dpg-d1l7cc6mcj7s73bsb1k0-a.oregon-postgres.render.com/assessment_management',
+export const connectToDatabase = async () => {
+  try {
+    if (!pool) {
+      pool = new Pool({
+        /* user: "postgres",
+        host: "localhost",
+        database: "DBMS_PROJECT",
+        password: "prasan123",
+        port: 5432 */
+       // connectionString: 'postgresql://postgres:HcgHOpsEFwwdNBoNpsKCEhhbcEckgpAK@crossover.proxy.rlwy.net:48399/railway',
+       connectionString:'postgresql://neondb_owner:npg_MGYqCc9Z4NVX@ep-twilight-sound-a7o6sshl-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
         ssl: {
-          rejectUnauthorized: false, // required for Render
-    },
-});
+          rejectUnauthorized: false, 
+        },
+      });
+    }
 
-module.exports = pool;
+    const client = await pool.connect();
+    console.log("✅ Connected to PostgreSQL");
+    client.release();
+
+    return pool;
+  } catch (err) {
+    console.error("❌ PostgreSQL Connection Error:", err);
+    throw err;
+  }
+};
+
+

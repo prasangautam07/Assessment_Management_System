@@ -1,16 +1,13 @@
-const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
-const jsonwebtoken = require("jsonwebtoken");
-const {createuser,getuserbyemail}= require("../model/usermodel");
-const validateauth= require("../middleware/authorization");
-
+import { createUser, getUserByUsername } from '../model/usermodel.js';
+import bcrypt from 'bcrypt'
+import jsonwebtoken from 'jsonwebtoken';
 
 
 // @desc registr a new user
 // @route POST /api/users/register
 // @access Public
 
-const registeruser =asyncHandler(async (req, res) => {
+export const registerUser =async (req, res) => {
     const{email,username,program,password}=req.body;
     if(!email || !username || !program || !password){
         res.status(400);
@@ -18,15 +15,14 @@ const registeruser =asyncHandler(async (req, res) => {
     }
 
     // Check if user already exists
-    const existinguser =await getuserbyemail(email);
+    const existinguser =await getUserByUsername(username);
     if(existinguser){
-        res.status(400);
-         console.log(`Registration failed: User already exists with email ${email}`);
-        throw new Error("User already exists");
+        res.status(400).json({ message: "User already exists" });
+        console.log(`Registration failed: User already exists with username ${username}`);
     }
     
     const hashedpassword = await bcrypt.hash(password, 10);
-    const newuser = await createuser
+    const newuser = await createUser
     (email, username, program, hashedpassword);
 
     res.status(201).json({  
@@ -37,33 +33,31 @@ const registeruser =asyncHandler(async (req, res) => {
         
         
     });
-});
+};
 
 //@desc login a user
 //@route POST/api/user/login
 //@access public
 
-const loginuser = asyncHandler(async(req,res)=>{
+export const loginUser = async(req,res)=>{
     console.log("Login request received");
-    const {email,password} =req.body;
-    if(!email || !password){
-        res.status(400);
-        throw new Error("Loin failed ! please fill all the fields");
+    const {username,password} =req.body;
+    if(!username || !password){
+        res.status(400).json({ message: "Please fill all the fields" });
     }
-    const user= await getuserbyemail(email);
+    const user= await getUserByUsername(username);
    //compare password
   if(user && (await bcrypt.compare(password,user.password))){
     const accessToken =jsonwebtoken.sign(
         {
             user:{
                 username:user.username,
-                email:user.email,
                 id:user.id
             },
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        'gsdkjghosdobg',// PROCESS.ENV.JWT_SECRET
         {
-            expiresIn:"1d"
+            expiresIn:"20s"
         }
     );
     res.status(200).json({
@@ -71,11 +65,24 @@ const loginuser = asyncHandler(async(req,res)=>{
     });
 
     }else{
-    console.log(`Login failed: Invalid email or password for ${email}`);
-      res.status(401);
-    throw new Error("Email or password is not valid");
+    console.log(`Login failed: Invalid username or password for ${username}`);
+    res.status(401).json({ message: "Invalid username or password" });
   }
-});
+};
 
 
-module.exports = {registeruser,loginuser};
+export const validateUser= async(req,res)=>{
+    const token=req.body.token || req.query.token || req.headers["x-access-token"];
+    if(!token){
+        return res.status(403).json({ message: "A token is required for authentication" });
+    }
+    try {
+        const decoded = jsonwebtoken.verify(token, 'gsdkjghosdobg'); // PROCESS.ENV.JWT_SECRET
+        req.user = decoded.user;
+        return res.status(200).json({ user: req.user });
+    } catch (err) {
+        return res.status(401).json({ message: "Invalid Token" });
+    }   
+}
+
+

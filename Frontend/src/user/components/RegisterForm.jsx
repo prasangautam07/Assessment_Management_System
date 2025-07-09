@@ -14,7 +14,7 @@ export const RegisterForm = ({ role }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/api/users/register', {
+      const res = await fetch('http://localhost:3000/api/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username, program, password }),
@@ -23,17 +23,16 @@ export const RegisterForm = ({ role }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert('Registration successful!');
-        // Clear form
+        console.log('Registration successful!');
         setEmail('');
         setUsername('');
         setProgram('');
         setPassword('');
       } else {
-        alert(`Error: ${data.message || 'Registration failed'}`);
+        console.log(`Error: ${data.message || 'Registration failed'}`);
       }
     }catch (error) {
-  alert(`Server error: ${error.message || 'Please try again later.'}`);
+  console.log(`Server error: ${error.message || 'Please try again later.'}`);
   console.error(error);
 }
 

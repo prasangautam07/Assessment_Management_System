@@ -1,11 +1,45 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
 
 
 export const LoginForm = ({role}) => {
     const [showPassword, setShowPassword] = useState(false);
+    const[password, setPassword] = useState('');
+    const[username, setUsername] = useState('');
+    const Navigate=useNavigate();
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:3000/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      const accessToken = data.accessToken;
+      if (res.ok) {
+        localStorage.setItem('accessToken', accessToken);
+        console.log('Login successful!');
+        // Redirect to dashboard or perform any other action
+       /*  if (role === 'teacher') {
+          Navigate('/teacher/dashboard');
+        } else if (role === 'student') {
+          Navigate('/dashboard');
+          } */
+       Navigate('/dashboard');
+
+      }
+      else {
+        console.log(`Error: ${data.message || 'Login failed'}`);
+      }
+    } catch (error) {
+      console.log(`Server error: ${error.message || 'Please try again later.'}`);
+      console.error(error);
+    }
+  }
   return (
     <div className='flex flex-col items-center  justify-center gap-4'>
         <div>
@@ -13,7 +47,7 @@ export const LoginForm = ({role}) => {
           <p className='font-semibold'>Welcome to IOE-TC </p>
           <p>Assesment Management System </p>
         </div>
-        <form className='flex flex-col gap-4 w-full'>
+        <form className='flex flex-col gap-4 w-full' onSubmit={handlesubmit}>
           <div className='flex flex-col items-start gap-2'>
             <label htmlFor="email" className='text-md'>Username</label>
             <div className='flex items-center border border-gray-300 rounded-md p-2 w-full focus-within:border-blue-300'>
@@ -24,6 +58,8 @@ export const LoginForm = ({role}) => {
                 id="username"
                 className='border-none outline-none w-full ml-2'
                 placeholder=' Eg. THA079BEI022'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -38,6 +74,8 @@ export const LoginForm = ({role}) => {
                 id="password"
                 className='outline-none w-full ml-2'
                 placeholder='Enter your password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
               {showPassword
@@ -45,14 +83,17 @@ export const LoginForm = ({role}) => {
                 : <EyeOff size={20} onClick={() => setShowPassword(true)} className='cursor-pointer ml-2' />}
             </div>
           </div>
-          <NavLink to='/dashboard' className='flex items-center w-full mx-auto'>
+          <div className='flex items-center w-full mx-auto'>
             <button type="submit" className='bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-90 hover:scale-[1.02] transition-transform duration-600'>Login</button>
-          </NavLink>
+          </div>
         </form>
-        <div className='flex items-center gap-2'>
+        {role==='student' && (
+          <div className='flex items-center gap-2'>
           <p className='text-md'>Don't have an account?</p>
           <a href={`/${role}/register`} className='text-primary'>Register</a>
         </div>
+        )}
+        
       </div>
   )
 }
