@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Key, Eye, EyeOff, Mail, GraduationCap } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export const RegisterForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +25,7 @@ export const RegisterForm = ({ role }) => {
 
       if (res.ok) {
         console.log('Registration successful!');
+        toast.success('Usesr Successfully Registered!');
         setEmail('');
         setUsername('');
         setProgram('');

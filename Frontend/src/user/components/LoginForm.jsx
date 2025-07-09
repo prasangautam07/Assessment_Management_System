@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 
 export const LoginForm = ({role}) => {
@@ -30,6 +31,7 @@ export const LoginForm = ({role}) => {
           Navigate('/dashboard');
           } */
        Navigate('/dashboard');
+       toast.success('Login successful!');
 
       }
       else {
