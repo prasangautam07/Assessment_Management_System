@@ -1,4 +1,4 @@
-import { createUser, getUserByUsername } from '../model/usermodel.js';
+import { createUser, getUserByUsername,getUserByEmail } from '../model/usermodel.js';
 import bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken';
 
@@ -15,10 +15,15 @@ export const registerUser =async (req, res) => {
     }
 
     // Check if user already exists
-    const existinguser =await getUserByUsername(username);
-    if(existinguser){
-        res.status(400).json({ message: "User already exists" });
+    const existingUserWithUsername =await getUserByUsername(username);
+    const existingUserWithEmail = await getUserByEmail(email);
+    if(existingUserWithUsername){
+        res.status(400).json({ message: "User already exists with same username" });
         console.log(`Registration failed: User already exists with username ${username}`);
+    }
+    if(existingUserWithEmail){
+        res.status(400).json({ message: "User already exists with same email" });
+        console.log(`Registration failed: User already exists with email ${email}`);
     }
     
     const hashedpassword = await bcrypt.hash(password, 10);

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Lock, Key, Eye, EyeOff, Mail, GraduationCap } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 export const RegisterForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   // Form fields state
   const [email, setEmail] = useState('');
@@ -11,40 +13,43 @@ export const RegisterForm = ({ role }) => {
   const [program, setProgram] = useState('');
   const [password, setPassword] = useState('');
 
-  const handlesubmit = async (e) => {
-    e.preventDefault();
+const handlesubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const res = await fetch('https://assessment-management-system-3gj3.onrender.com/api/users/register', {
-        method: 'POST',
+  try {
+    const res = await axios.post(
+      'https://assessment-management-system-3gj3.onrender.com/api/users/register',
+      { email, username, program, password },
+      {
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, username, program, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        console.log('Registration successful!');
-        toast.success('Usesr Successfully Registered!');
-        setEmail('');
-        setUsername('');
-        setProgram('');
-        setPassword('');
-      } else {
-        console.log(`Error: ${data.message || 'Registration failed'}`);
       }
-    }catch (error) {
-  console.log(`Server error: ${error.message || 'Please try again later.'}`);
-  console.error(error);
-}
+    );
 
-  };
+    console.log('Registration successful!');
+    toast.success('User successfully registered!');
+    setEmail('');
+    setUsername('');
+    setProgram('');
+    setPassword('');
+    setError('');
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      console.log(`Error: ${error.response.data.message}`);
+      setError(error.response.data.message);
+    } else {
+      console.log(`Server error: ${error.message || 'Please try again later.'}`);
+      setError('Registration failed. Please try again later.');
+    }
+  }
+};
+
 
   return (
     <div className='flex flex-col items-center justify-center gap-4'>
       <div>
         <h1 className='font-bold text-2xl mb-1'>Signup</h1>
         <p>Enter your details to signup.</p>
+         <p className={`'text-sm text-red-600' ${error ? 'text-red-600 opacity-100' : 'opacity-0'}`}>{error || 'p'}</p>
       </div>
       <form className='flex flex-col gap-4 w-full' onSubmit={handlesubmit}>
         <div className='flex flex-col items-start gap-2'>
@@ -57,7 +62,6 @@ export const RegisterForm = ({ role }) => {
               id='email'
               className='border-none outline-none w-full ml-2'
               placeholder='Enter your email'
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -73,7 +77,6 @@ export const RegisterForm = ({ role }) => {
               id='username'
               className='border-none outline-none w-full ml-2'
               placeholder={role === 'teacher' ? 'Your Username' : 'Eg. THA079BEI022'}
-              required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -89,7 +92,6 @@ export const RegisterForm = ({ role }) => {
               id='program'
               className='border-none outline-none w-full ml-2'
               placeholder='Eg. BEI'
-              required
               value={program}
               onChange={(e) => setProgram(e.target.value)}
             />
@@ -105,7 +107,6 @@ export const RegisterForm = ({ role }) => {
               id='password'
               className='outline-none w-full ml-2'
               placeholder='Enter your password'
-              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

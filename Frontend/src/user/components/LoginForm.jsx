@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -8,46 +9,56 @@ import { toast } from 'react-toastify'
 
 export const LoginForm = ({role}) => {
     const [showPassword, setShowPassword] = useState(false);
+    const[error, setError] = useState(null);
     const[password, setPassword] = useState('');
     const[username, setUsername] = useState('');
     const Navigate=useNavigate();
-  const handlesubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('https://assessment-management-system-3gj3.onrender.com/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await res.json();
-      const accessToken = data.accessToken;
-      if (res.ok) {
-        localStorage.setItem('accessToken', accessToken);
-        console.log('Login successful!');
-        // Redirect to dashboard or perform any other action
-       /*  if (role === 'teacher') {
-          Navigate('/teacher/dashboard');
-        } else if (role === 'student') {
-          Navigate('/dashboard');
-          } */
-       Navigate('/dashboard');
-       toast.success('Login successful!');
+ const handlesubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(
+      'https://assessment-management-system-3gj3.onrender.com/api/users/login',
+      { username, password }, // Request body
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
 
-      }
-      else {
-        console.log(`Error: ${data.message || 'Login failed'}`);
-      }
-    } catch (error) {
-      console.log(`Server error: ${error.message || 'Please try again later.'}`);
-      console.error(error);
+    const accessToken = res.data.accessToken; // Axios automatically parses JSON
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
+      console.log('Login successful!');
+      toast.success('Login successful!');
+
+      // Redirect based on role
+      /* if (role === 'teacher') {
+           Navigate('/teacher/dashboard');
+         } else if (role === 'student') {
+           Navigate('/dashboard');
+         } */
+      Navigate('/dashboard');
+    } else {
+      setError('Login failed: No token received');
+    }
+  } catch (error) {
+    // Error handling
+    if (error.response && error.response.data && error.response.data.message) {
+      console.error(`Login error: ${error.response.data.message}`);
+      setError(error.response.data.message);
+    } else {
+      console.error('Unexpected error:', error);
+      setError('Server error. Please try again later.');
     }
   }
+};
+
   return (
     <div className='flex flex-col items-center  justify-center gap-4'>
         <div>
           <h1 className='font-bold text-2xl mb-1'>{role==='teacher'?'Teacher Login':'Student Login'}</h1>
           <p className='font-semibold'>Welcome to IOE-TC </p>
           <p>Assesment Management System </p>
+         <p className={`'text-sm text-red-600' ${error ? 'text-red-600 opacity-100' : 'opacity-0'}`}>{error || 'p'}</p>
         </div>
         <form className='flex flex-col gap-4 w-full' onSubmit={handlesubmit}>
           <div className='flex flex-col items-start gap-2'>
@@ -62,7 +73,7 @@ export const LoginForm = ({role}) => {
                 placeholder=' Eg. THA079BEI022'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required
+                
               />
             </div>
           </div>
@@ -78,7 +89,7 @@ export const LoginForm = ({role}) => {
                 placeholder='Enter your password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                
               />
               {showPassword
                 ? <Eye size={20} onClick={() => setShowPassword(false)} className='cursor-pointer ml-2' />
