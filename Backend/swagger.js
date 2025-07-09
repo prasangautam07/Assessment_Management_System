@@ -12,7 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000', // or your hosted URL
+        url: 'http://localhost:3000'||'https://assessment-management-system-3gj3.onrender.com', // or your hosted URL
       },
     ],
   },
