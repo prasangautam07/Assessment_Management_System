@@ -1,10 +1,9 @@
 import React from 'react'
-import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
-import { toast } from 'react-toastify'
+import { loginUser } from '../../utils/UserApi'
 
 
 export const LoginForm = ({role}) => {
@@ -15,40 +14,9 @@ export const LoginForm = ({role}) => {
     const Navigate=useNavigate();
  const handlesubmit = async (e) => {
   e.preventDefault();
-  try {
-    const res = await axios.post(
-      'https://assessment-management-system-3gj3.onrender.com/api/users/login',
-      { username, password }, // Request body
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
-
-    const accessToken = res.data.accessToken; // Axios automatically parses JSON
-    if (accessToken) {
-      localStorage.setItem('accessToken', accessToken);
-      console.log('Login successful!');
-      toast.success('Login successful!');
-
-      // Redirect based on role
-      /* if (role === 'teacher') {
-           Navigate('/teacher/dashboard');
-         } else if (role === 'student') {
-           Navigate('/dashboard');
-         } */
-      Navigate('/dashboard');
-    } else {
-      setError('Login failed: No token received');
-    }
-  } catch (error) {
-    // Error handling
-    if (error.response && error.response.data && error.response.data.message) {
-      console.error(`Login error: ${error.response.data.message}`);
-      setError(error.response.data.message);
-    } else {
-      console.error('Unexpected error:', error);
-      setError('Server error. Please try again later.');
-    }
+  const success=await loginUser(username, password,setError);
+  if(success){
+    Navigate('/dashboard');
   }
 };
 

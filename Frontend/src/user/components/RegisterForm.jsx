@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Lock, Key, Eye, EyeOff, Mail, GraduationCap } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { registerUser } from '../../utils/UserApi';
 
 export const RegisterForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,31 +14,14 @@ export const RegisterForm = ({ role }) => {
 
 const handlesubmit = async (e) => {
   e.preventDefault();
-
-  try {
-    const res = await axios.post(
-      'https://assessment-management-system-3gj3.onrender.com/api/users/register',
-      { email, username, program, password },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-
-    console.log('Registration successful!');
-    toast.success('User successfully registered!');
+  const success = await registerUser(email, username, program, password, setError);
+  if (success) {
+    // Reset form fields on successful registration
     setEmail('');
     setUsername('');
     setProgram('');
     setPassword('');
     setError('');
-  } catch (error) {
-    if (error.response && error.response.data && error.response.data.message) {
-      console.log(`Error: ${error.response.data.message}`);
-      setError(error.response.data.message);
-    } else {
-      console.log(`Server error: ${error.message || 'Please try again later.'}`);
-      setError('Registration failed. Please try again later.');
-    }
   }
 };
 

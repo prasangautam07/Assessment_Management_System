@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { validateUser } from "./api"; 
+import { validateUser } from "./UserApi"; 
 
 export const ProtectedRoutes = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(null); // null = loading
