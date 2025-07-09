@@ -5,7 +5,7 @@ export const validateUser = async () => {
   console.log('Validating user with token:', token);
 
   try {
-    const response = await axios.get('http://localhost:3000/api/users/validate', {
+    const response = await axios.get('https://assessment-management-system-3gj3.onrender.com/api/users/validate', {
       headers: {
         authorization: `Bearer ${token}`,
       },

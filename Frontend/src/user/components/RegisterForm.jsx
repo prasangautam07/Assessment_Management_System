@@ -14,7 +14,7 @@ export const RegisterForm = ({ role }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:3000/api/users/register', {
+      const res = await fetch('https://assessment-management-system-3gj3.onrender.com/api/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username, program, password }),
