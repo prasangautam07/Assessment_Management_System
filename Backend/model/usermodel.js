@@ -13,14 +13,13 @@ export const createUser = async (email, username, program, password, role = 'stu
 
   return result.rows[0];
 };
-
-export const getUserByUsername = async (username) => {
-  const db = await connectToDatabase();
-  if (!db) {
-    throw new Error('Database connection failed');
-  }
-
-  const result = await db.query('SELECT * FROM users WHERE username = $1', [username]);
-
-  return result.rows[0];
+export const getUserByUsername= async(username)=>{
+    const db= await connectToDatabase();
+    if (!db) {
+        throw new Error("Database connection failed");
+    }
+    const result =await db.query("select * from users where username =$1",
+        [username]     
+    );
+return result.rows[0];
 };

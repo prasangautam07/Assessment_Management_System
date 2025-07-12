@@ -1,6 +1,9 @@
 import React from "react";
-
+import { useAuth } from "../../utils/AuthContext";
 export const Profile = () => {
+  const { user } = useAuth();
+  console.log("User in Profile component:", user);
+  const formatted = new Date(user.dob).toLocaleDateString(); 
   return (
     <div className=" flex  justify-evenly gap-4 mt-10">
       <div className="flex flex-col gap-20  w-1/2 p-3">
@@ -10,11 +13,11 @@ export const Profile = () => {
           </h1>
           <hr className="my-4 w-full border-t-2 border-gray-300" />
           <div className=" flex flex-col text-[#888888] items-start font-semibold text-[15px] mb-4">
-            <p>Full Name: PRASAN GAUTAM</p>
-            <p>Contact : 9821593427 / 9821593427</p>
-            <p>Gender : M</p>
-            <p>Date Of Birth : 2060-05-18 / 2003-09-04(AD)</p>
-            <p>Ethnicity : || Category : Regular</p>
+            <p>Full Name: {user.name}</p>
+            <p>Contact : {user.contact_no}</p>
+            <p>Gender : {user.gender}</p>
+            <p>Date Of Birth : {formatted}</p>
+            <p>Category : {user.category}</p>
           </div>
         </div>
         

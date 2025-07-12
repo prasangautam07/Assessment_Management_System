@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Lock, Key, Eye, EyeOff, Mail, GraduationCap } from 'lucide-react';
+import { registerUser } from '../../utils/api/UserApi';
 
 export const RegisterForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   // Form fields state
   const [email, setEmail] = useState('');
@@ -10,39 +12,26 @@ export const RegisterForm = ({ role }) => {
   const [program, setProgram] = useState('');
   const [password, setPassword] = useState('');
 
-  const handlesubmit = async (e) => {
-    e.preventDefault();
+const handlesubmit = async (e) => {
+  e.preventDefault();
+  const success = await registerUser(email, username, program, password, setError);
+  if (success) {
+    // Reset form fields on successful registration
+    setEmail('');
+    setUsername('');
+    setProgram('');
+    setPassword('');
+    setError('');
+  }
+};
 
-    try {
-      const res = await fetch('https://assessment-management-system-3gj3.onrender.com/api/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, username, program, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        console.log('Registration successful!');
-        setEmail('');
-        setUsername('');
-        setProgram('');
-        setPassword('');
-      } else {
-        console.log(`Error: ${data.message || 'Registration failed'}`);
-      }
-    }catch (error) {
-  console.log(`Server error: ${error.message || 'Please try again later.'}`);
-  console.error(error);
-}
-
-  };
 
   return (
     <div className='flex flex-col items-center justify-center gap-4'>
       <div>
         <h1 className='font-bold text-2xl mb-1'>Signup</h1>
         <p>Enter your details to signup.</p>
+         <p className={`'text-sm text-red-600' ${error ? 'text-red-600 opacity-100' : 'opacity-0'}`}>{error || 'p'}</p>
       </div>
       <form className='flex flex-col gap-4 w-full' onSubmit={handlesubmit}>
         <div className='flex flex-col items-start gap-2'>
@@ -55,7 +44,6 @@ export const RegisterForm = ({ role }) => {
               id='email'
               className='border-none outline-none w-full ml-2'
               placeholder='Enter your email'
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -71,7 +59,6 @@ export const RegisterForm = ({ role }) => {
               id='username'
               className='border-none outline-none w-full ml-2'
               placeholder={role === 'teacher' ? 'Your Username' : 'Eg. THA079BEI022'}
-              required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -87,7 +74,6 @@ export const RegisterForm = ({ role }) => {
               id='program'
               className='border-none outline-none w-full ml-2'
               placeholder='Eg. BEI'
-              required
               value={program}
               onChange={(e) => setProgram(e.target.value)}
             />
@@ -103,7 +89,6 @@ export const RegisterForm = ({ role }) => {
               id='password'
               className='outline-none w-full ml-2'
               placeholder='Enter your password'
-              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
