@@ -47,7 +47,7 @@ export const loginUser= async (username, password,setError)=>{
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken);
       console.log('Login successful!');
-      toast.success('Login seccessful!');
+      toast.success('Login successful!');
       return(true);
     } else {
       setError('Login failed: No token received');
