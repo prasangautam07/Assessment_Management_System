@@ -19,23 +19,27 @@ export const registerUser = async (req, res) => {
   }
 
     // Check if user already exists
-    const existinguser =await getUserByUsername(username);
-    if(existinguser){
-        res.status(400).json({ message: "User already exists" });
-        console.log(`Registration failed: User already exists with username ${username}`);
+  const existingUserWithUsername = await getUserByUsername(username);
+  const existingUserWithEmail = await getUserByEmail(email);
+  if (existingUserWithUsername) {
+    res.status(400).json({ message: "User already exists with same username" });
+    console.log(
+      `Registration failed: User already exists with username ${username}`
+    );
+  }
+  if (existingUserWithEmail) {
+    res.status(400).json({ message: "User already exists with same email" });
+    console.log(`Registration failed: User already exists with email ${email}`);
     }
     
     const hashedpassword = await bcrypt.hash(password, 10);
-    const newuser = await createUser
-    (email, username, program, hashedpassword);
+  const newuser = await createUser(email, username, program, hashedpassword);
 
     res.status(201).json({  
         id: newuser.id,
         email: newuser.email,
         username: newuser.username,
-        program: newuser.program
-        
-        
+        program: newuser.program,
     });
 };
 
@@ -43,25 +47,25 @@ export const registerUser = async (req, res) => {
 //@route POST/api/user/login
 //@access public
 
-export const loginUser = async(req,res)=>{
+export const loginUser = async (req, res) => {
     console.log("Login request received");
-    const {username,password} =req.body;
-    if(!username || !password){
+  const { username, password } = req.body;
+  if (!username || !password) {
         res.status(400).json({ message: "Please fill all the fields" });
     }
-    const user= await getUserByUsername(username);
+  const user = await getUserByUsername(username);
    //compare password
-  if(user && (await bcrypt.compare(password,user.password))){
-    const accessToken =jsonwebtoken.sign(
+  if (user && (await bcrypt.compare(password, user.password))) {
+    const accessToken = jsonwebtoken.sign(
         {
-            user:{
-                username:user.username,
-                id:user.id
+        user: {
+          username: user.username,
+          id: user.id,
             },
         },
-        'gsdkjghosdobg',// PROCESS.ENV.JWT_SECRET
+      "gsdkjghosdobg", // PROCESS.ENV.JWT_SECRET
         {
-            expiresIn:"20s"
+        expiresIn: "20m",
         }
     );
     res.status(200).json({

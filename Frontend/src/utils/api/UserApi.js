@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-const localHost=false;
+const localHost=true;
 const apiUrl = localHost ? 'http://localhost:3000/api' : 'https://assessment-management-system-3gj3.onrender.com/api';
 
 //const apiUrl = 'https://assessment-management-system-3gj3.onrender.com/api';

@@ -64,15 +64,8 @@ router.post('/login', loginUser);
  *       500:
  *         description: Server error
  */
-router.get('/validate', validateToken, (req, res) => {
-    res.json({
-        username: req.user.username,
-        id: req.user.id,
-        role: req.user.role
-    });
-});
+router.get('/validate', validateToken, validateUser);
 
 
-// router.get('/current', currentuser);
 
 export default  router;

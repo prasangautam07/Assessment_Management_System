@@ -23,3 +23,13 @@ export const getUserByUsername= async(username)=>{
     );
 return result.rows[0];
 };
+export const getUserByEmail= async(email)=>{
+    const db= await connectToDatabase();
+    if (!db) {
+        throw new Error("Database connection failed");
+    }
+    const result =await db.query("select * from users where email =$1",
+        [email]     
+    );
+return result.rows[0];
+};
