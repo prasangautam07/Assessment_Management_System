@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
-import { loginUser } from '../../utils/UserApi'
+import { loginUser } from '../../utils/api/UserApi'
 
 
 export const LoginForm = ({role}) => {

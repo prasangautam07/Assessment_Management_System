@@ -1,18 +1,30 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const localHost=false;
+const apiUrl = localHost ? 'http://localhost:3000/api' : 'https://assessment-management-system-3gj3.onrender.com/api';
 
-export const validateUser = async () => {
+//const apiUrl = 'https://assessment-management-system-3gj3.onrender.com/api';
+//const apiUrl = 'http://localhost:3000/api';
+export const validateUser = async (setUser) => {
   const token = localStorage.getItem('accessToken');
+  if (!token) {
+    console.error('No access token found in localStorage');
+    return null;
+  }
   console.log('Validating user with token:', token);
 
   try {
-    const response = await axios.get('https://assessment-management-system-3gj3.onrender.com/api/users/validate', {
+    const response = await axios.get(`${apiUrl}/users/validate`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('User validated:', response.data);
+    console.log('User validated:', response);
+    if (setUser) {
+      setUser(response.data.user);
+      console.log('User set in context:', response.data.user);
+    }
     return response.data;
 
   } catch (error) {
@@ -24,18 +36,18 @@ export const validateUser = async () => {
 export const loginUser= async (username, password,setError)=>{
     try {
     const res = await axios.post(
-      'https://assessment-management-system-3gj3.onrender.com/api/users/login',
+      `${apiUrl}/users/login`,
       { username, password }, // Request body
       {
         headers: { 'Content-Type': 'application/json' }
       }
     );
 
-    const accessToken = res.data.accessToken; // Axios automatically parses JSON
+    const accessToken = res.data.accessToken;
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken);
       console.log('Login successful!');
-      toast.success('Login successful!');
+      toast.success('Login seccessful!');
       return(true);
     } else {
       setError('Login failed: No token received');
@@ -57,7 +69,7 @@ export const loginUser= async (username, password,setError)=>{
 export const registerUser = async (email, username, program, password ,setError) => {
   try {
     const res = await axios.post(
-      'https://assessment-management-system-3gj3.onrender.com/api/users/register',
+      `${apiUrl}/users/register`,
       { email, username, program, password },
       {
         headers: { 'Content-Type': 'application/json' },

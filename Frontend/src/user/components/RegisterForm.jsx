@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Key, Eye, EyeOff, Mail, GraduationCap } from 'lucide-react';
-import { registerUser } from '../../utils/UserApi';
+import { registerUser } from '../../utils/api/UserApi';
 
 export const RegisterForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false);

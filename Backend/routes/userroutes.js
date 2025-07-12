@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { loginUser,registerUser} from '../controller/usercontroller.js';
+import { loginUser,registerUser,validateUser} from '../controller/usercontroller.js';
 import validateToken from '../middleware/authorization.js';
 
 
@@ -58,8 +58,6 @@ router.post('/register', registerUser);
  *             properties:
  *               username:
  *                 type: string
- *               email:
- *                 type: string
  *               password:
  *                 type: string
  *     responses:
@@ -97,15 +95,8 @@ router.post('/login', loginUser);
  *       500:
  *         description: Server error
  */
-router.get('/validate', validateToken, (req, res) => {
-    res.json({
-        username: req.user.username,
-        id: req.user.id,
-        role: req.user.role
-    });
-});
+router.get('/validate', validateToken,validateUser);
 
 
-// router.get('/current', currentuser);
 
 export default  router;
