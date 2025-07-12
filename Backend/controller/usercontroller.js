@@ -17,21 +17,23 @@ export const registerUser =async (req, res) => {
     // Check if user already exists
     const existinguser =await getUserByUsername(username);
     if(existinguser){
-        res.status(400).json({ message: "User already exists" });
-        console.log(`Registration failed: User already exists with username ${username}`);
+       return res.status(400).json({ message: "User already exists" });
+        
     }
     
     const hashedpassword = await bcrypt.hash(password, 10);
-    const newuser = await createUser
-    (email, username, program, hashedpassword);
+    const role = 'student'; // Default role for new users
 
-    res.status(201).json({  
+
+    const newuser = await createUser
+    (email, username, program, hashedpassword,role);
+
+    return res.status(201).json({  
         id: newuser.id,
         email: newuser.email,
         username: newuser.username,
-        program: newuser.program
-        
-        
+        program: newuser.program,
+        role : newuser.role,  
     });
 };
 
@@ -42,6 +44,7 @@ export const registerUser =async (req, res) => {
 export const loginUser = async(req,res)=>{
     console.log("Login request received");
     const {username,password} =req.body;
+
     if(!username || !password){
         res.status(400).json({ message: "Please fill all the fields" });
     }
@@ -52,12 +55,13 @@ export const loginUser = async(req,res)=>{
         {
             user:{
                 username:user.username,
-                id:user.id
+                id:user.id,
+                role: user.role,
             },
         },
-        'gsdkjghosdobg',// PROCESS.ENV.JWT_SECRET
+         process.env.JWT_SECRET,
         {
-            expiresIn:"20s"
+            expiresIn:"1h"
         }
     );
     res.status(200).json({

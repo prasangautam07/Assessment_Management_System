@@ -1,28 +1,26 @@
+import { connectToDatabase } from '../database/db.js';
 
+export const createUser = async (email, username, program, password, role = 'student') => {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error('Database connection failed');
+  }
 
-import  {connectToDatabase } from '../database/db.js';
-import bcrypt from 'bcrypt';
+  const result = await db.query(
+    'INSERT INTO users (email, username, program, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    [email, username, program, password, role]
+  );
 
-export const createUser = async (email, username, program, password) => {
-    const db= await connectToDatabase();
-    if (!db) {
-        throw new Error("Database connection failed");
-    }
-    const result  =await db.query
-    ('Insert into users ( email,username,program,password) values($1,$2,$3,$4)returning *',
-        [email,username,program,password]
-    );
-    console.log("Created User:", result.rows[0]);
-    return result.rows[0];
-};
-export const getUserByUsername= async(username)=>{
-    const db= await connectToDatabase();
-    if (!db) {
-        throw new Error("Database connection failed");
-    }
-    const result =await db.query("select * from users where username =$1",
-        [username]     
-    );
-return result.rows[0];
+  return result.rows[0];
 };
 
+export const getUserByUsername = async (username) => {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error('Database connection failed');
+  }
+
+  const result = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+
+  return result.rows[0];
+};
