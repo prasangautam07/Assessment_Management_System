@@ -83,10 +83,10 @@ export const validateUser = async (req, res) => {
 
   const result = await db.query(
     `SELECT users.id, users.email, users.username, users.program,
-            studetData.name, studetData.roll, studetData.contact_no,
-            studetData.gender, studetData.dob, studetData.category
+            studentData.name, studentData.roll, studentData.contact_no,
+            studentData.gender, studentData.dob, studentData.category
      FROM users
-     INNER JOIN studetData ON users.username = studetData.roll
+     INNER JOIN studentData ON users.username = studentData.roll
      WHERE users.username = $1`,
     [username]
   );
