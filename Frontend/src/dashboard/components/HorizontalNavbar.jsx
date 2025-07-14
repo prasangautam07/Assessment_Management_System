@@ -3,7 +3,7 @@ import { useState } from "react";
 import { User, ChevronDown } from "lucide-react";
 import { useAuth } from "../../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
-export const HorizontalNavbar = () => {
+export const HorizontalNavbar = ({role}) => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user } = useAuth();
@@ -13,7 +13,7 @@ export const HorizontalNavbar = () => {
   const handleLogOut = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
-    navigate("/student/login");
+    navigate(`/${role}/login`);
   }
   return (
     <div className="bg-white h-15 flex items-center justify-end relative">

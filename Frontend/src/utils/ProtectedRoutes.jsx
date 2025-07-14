@@ -19,5 +19,5 @@ export const ProtectedRoutes = () => {
   if (isUserLoggedIn === null) return <p>Loading...</p>; // Optional loader
 
   return isUserLoggedIn ? <Outlet /> : (
-  <Navigate to="/student/login" />);
+  <Navigate to="/login" />);
 };

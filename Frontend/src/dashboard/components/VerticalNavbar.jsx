@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser,faPen } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
-export const VerticalNavbar = () => {
+export const VerticalNavbar = ({role}) => {
   const { user } = useAuth();
   return (
     <div className='flex flex-col h-screen w-60 bg-gray-800 text-white p-4 gap-10'>
@@ -14,7 +14,7 @@ export const VerticalNavbar = () => {
             </div>
             <div className='flex flex-col justify-start'>
                 <p className='flex justify-start text-[15px] font-bold'>{user.name}</p>
-                <p className='flex justify-start text-[12px]'>Student</p>
+                <p className='flex justify-start text-[12px]'>{role}</p>
             </div>
         </div>
         <div className="flex flex-col gap-2">

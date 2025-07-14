@@ -96,8 +96,6 @@ export const deleteTeacherbyid= asyncHandler(async(userId)=>{
     }
 
     await db.query ("delete from teachers where user_id =$1",[userId
-
-
       
     ])
         

@@ -49,11 +49,14 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     console.log("Login request received");
-  const { username, password } = req.body;
+  const { username, password, role } = req.body;
   if (!username || !password) {
         res.status(400).json({ message: "Please fill all the fields" });
     }
   const user = await getUserByUsername(username);
+  if(user && user.role !== role){
+    return res.status(403).json({ message: `Access denied for ${role} role` });
+  }
    //compare password
   if (user && (await bcrypt.compare(password, user.password))) {
     const accessToken = jsonwebtoken.sign(
@@ -80,20 +83,29 @@ export const loginUser = async (req, res) => {
 export const validateUser = async (req, res) => {
   const db = await connectToDatabase();
   const username = req.user.username;
-
-  const result = await db.query(
-    `SELECT users.id, users.email, users.username, users.program,
-            studentData.name, studentData.roll, studentData.contact_no,
-            studentData.gender, studentData.dob, studentData.category
-     FROM users
-     INNER JOIN studentData ON users.username = studentData.roll
-     WHERE users.username = $1`,
-    [username]
-  );
+  const role = await getUserByUsername(username).then(user => user.role);
+  console.log(`Validating user: ${username} with role: ${role}`);
+  let result;
+  if(role==='student'){
+   result = await db.query(
+      `SELECT users.id, users.email, users.username, users.program,
+              studentData.name, studentData.roll, studentData.contact_no,
+              studentData.gender, studentData.dob, studentData.category
+       FROM users
+       INNER JOIN studentData ON users.username = studentData.roll
+       WHERE users.username = $1`,
+      [username]
+    );
+  }else if(role==='teacher'){
+   result = await db.query(
+      'SELECT email, username FROM users WHERE username = $1',
+      [username]
+    );
+    }
 
   if (result.rows.length === 0) {
     return res.status(404).json({ message: "User not found" });
   }
-
+  console.log(`User validated: ${result.rows[0]}`);
   return res.status(200).json({ user: result.rows[0] });
 };

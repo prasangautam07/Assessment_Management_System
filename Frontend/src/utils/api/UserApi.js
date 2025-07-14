@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-const localHost=true;
+const localHost=false;
 const apiUrl = localHost ? 'http://localhost:3000/api' : 'https://assessment-management-system-3gj3.onrender.com/api';
 
 //const apiUrl = 'https://assessment-management-system-3gj3.onrender.com/api';
@@ -33,11 +33,11 @@ export const validateUser = async (setUser) => {
   }
 };
 
-export const loginUser= async (username, password,setError)=>{
+export const loginUser= async (username, password,setError,role)=>{
     try {
     const res = await axios.post(
       `${apiUrl}/users/login`,
-      { username, password }, // Request body
+      { username, password,role }, // Request body
       {
         headers: { 'Content-Type': 'application/json' }
       }
