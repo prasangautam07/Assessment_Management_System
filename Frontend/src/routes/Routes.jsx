@@ -16,11 +16,13 @@ export const PagesRoutes = () => {
       <Route path="/student/login" element={<StudentLoginPage />} />
       <Route path="/student/register" element={<StudentRegisterPage />} />
       <Route path="/teacher/login" element={<TeacherLoginPage />} />
-      <Route element={<ProtectedRoutes/>}>
+      <Route element={<ProtectedRoutes role='student'/>}>
         <Route path="/student/dashboard" element={<StudentDashboardLayout />} >
           <Route index element={<ProfilePage />} />
           <Route path="marks" element={<ResultsPage />} />
-        </Route>
+        </Route>          
+      </Route>
+      <Route element={<ProtectedRoutes role='teacher'/>}>
         <Route path="/teacher/dashboard" element={<TeacherDashboardLayout />} >
           
         </Route>

@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { validateUser } from "./api/UserApi"; 
-import { useAuth } from "./AuthContext"; // Assuming you have an AuthContext to manage user state
+import { validateUser } from "./api/UserApi";
+import { useAuth } from "./AuthContext";
 
-export const ProtectedRoutes = () => {
+export const ProtectedRoutes = ({ role }) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(null); // null = loading
-  const { setUser } = useAuth(); // Get user from AuthContext if needed
+  const [validatedUser, setValidatedUser] = useState(null);
+  const { setUser } = useAuth();
+
   useEffect(() => {
     const checkUser = async () => {
-      const user = await validateUser(setUser);
-      console.log("User validation result:", user);
-      setIsUserLoggedIn(!!user); // ✅ true if user exists
+      const checkedUser = await validateUser(setUser);
+      console.log("Checked user:", checkedUser); // Debugging line
+      setValidatedUser(checkedUser?.user || null);
+      setIsUserLoggedIn(!!checkedUser);
     };
-
     checkUser();
   }, []);
 
-  if (isUserLoggedIn === null) return <p>Loading...</p>; // Optional loader
+  if (isUserLoggedIn === null) return <p>Loading...</p>;
 
-  return isUserLoggedIn ? <Outlet /> : (
-  <Navigate to="/login" />);
+  if (!isUserLoggedIn) return <Navigate to="/login" />;
+
+  if (role && validatedUser && validatedUser.role !== role) {
+    return <Navigate to={`/${validatedUser.role}/dashboard`} />;
+  }
+
+  return <Outlet />;
 };

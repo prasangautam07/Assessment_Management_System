@@ -88,7 +88,7 @@ export const validateUser = async (req, res) => {
   let result;
   if(role==='student'){
    result = await db.query(
-      `SELECT users.id, users.email, users.username, users.program,
+      `SELECT users.id, users.email, users.username, users.program,users.role,
               studentData.name, studentData.roll, studentData.contact_no,
               studentData.gender, studentData.dob, studentData.category
        FROM users
@@ -98,7 +98,7 @@ export const validateUser = async (req, res) => {
     );
   }else if(role==='teacher'){
    result = await db.query(
-      'SELECT email, username FROM users WHERE username = $1',
+      'SELECT email, username,role FROM users WHERE username = $1',
       [username]
     );
     }
