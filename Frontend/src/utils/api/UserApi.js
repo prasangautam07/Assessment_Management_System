@@ -3,8 +3,6 @@ import { toast } from 'react-toastify';
 const localHost=false;
 const apiUrl = localHost ? 'http://localhost:3000/api' : 'https://assessment-management-system-3gj3.onrender.com/api';
 
-//const apiUrl = 'https://assessment-management-system-3gj3.onrender.com/api';
-//const apiUrl = 'http://localhost:3000/api';
 export const validateUser = async (setUser) => {
   const token = localStorage.getItem('accessToken');
   if (!token) {
@@ -37,7 +35,7 @@ export const loginUser= async (username, password,setError,role)=>{
     try {
     const res = await axios.post(
       `${apiUrl}/users/login`,
-      { username, password,role }, // Request body
+      { username, password,role },
       {
         headers: { 'Content-Type': 'application/json' }
       }

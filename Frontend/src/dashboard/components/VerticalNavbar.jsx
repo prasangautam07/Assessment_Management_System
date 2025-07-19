@@ -18,7 +18,7 @@ export const VerticalNavbar = ({role}) => {
             </div>
         </div>
         <div className="flex flex-col gap-2">
-            <NavLink to="/dashboard" className="flex items-center gap-2 p-2 font-semibold  hover:bg-gray-700 rounded-md">
+            <NavLink to="" className="flex items-center gap-2 p-2 font-semibold  hover:bg-gray-700 rounded-md">
               <UserCircle size={20} />
               <span>Profile</span>
             </NavLink>
