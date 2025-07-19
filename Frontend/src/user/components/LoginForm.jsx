@@ -74,6 +74,7 @@ export const LoginForm = ({role}) => {
           <a href={`/${role}/register`} className='text-primary'>Register</a>
         </div>
         )}
+        <a href='/' className='text-primary'>Back to Home Page?</a>
         
       </div>
   )
