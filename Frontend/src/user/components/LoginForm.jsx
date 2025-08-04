@@ -24,7 +24,7 @@ export const LoginForm = ({role}) => {
     <div className='flex flex-col items-center  justify-center gap-4'>
         <div>
           <h1 className='font-bold text-2xl mb-1'>{role==='teacher'?'Teacher Login':'Student Login'}</h1>
-          <p className='font-semibold'>Welcome to IOE-TC </p>
+          <p className='font-semibold'>Welcome to IOE-TEC </p>
           <p>Assesment Management System </p>
          <p className={`'text-sm text-red-600' ${error ? 'text-red-600 opacity-100' : 'opacity-0'}`}>{error || 'p'}</p>
         </div>
@@ -74,8 +74,7 @@ export const LoginForm = ({role}) => {
           <a href={`/${role}/register`} className='text-primary'>Register</a>
         </div>
         )}
-        <a href='/' className='text-primary'>Back to Home Page?</a>
-        
+        <a href='/' className='text-primary'>Back to Home Page?</a>       
       </div>
   )
 }

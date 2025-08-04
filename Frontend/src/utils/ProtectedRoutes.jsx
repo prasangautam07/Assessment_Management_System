@@ -11,7 +11,6 @@ export const ProtectedRoutes = ({ role }) => {
   useEffect(() => {
     const checkUser = async () => {
       const checkedUser = await validateUser(setUser);
-      console.log("Checked user:", checkedUser); // Debugging line
       setValidatedUser(checkedUser?.user || null);
       setIsUserLoggedIn(!!checkedUser);
     };
@@ -20,7 +19,7 @@ export const ProtectedRoutes = ({ role }) => {
 
   if (isUserLoggedIn === null) return <p>Loading...</p>;
 
-  if (!isUserLoggedIn) return <Navigate to="/login" />;
+  if (!isUserLoggedIn) return <Navigate to='/' />;
 
   if (role && validatedUser && validatedUser.role !== role) {
     return <Navigate to={`/${validatedUser.role}/dashboard`} />;

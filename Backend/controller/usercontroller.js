@@ -92,7 +92,7 @@ export const validateUser = async (req, res) => {
               studentData.name, studentData.roll, studentData.contact_no,
               studentData.gender, studentData.dob, studentData.category
        FROM users
-       INNER JOIN studentData ON users.username = studentData.roll
+       LEFT JOIN studentData ON users.username = studentData.roll
        WHERE users.username = $1`,
       [username]
     );

@@ -10,6 +10,7 @@ import { HomePage } from '../HomePage'
 import { Route, Routes } from 'react-router-dom'
 import { TeacherDashboardLayout } from '../dashboard/teacherDashboard/pages/TeacherDashboardLayout'
 import { TeacherDashboard } from '../dashboard/teacherDashboard/components/UsersProfiles'
+import { EditStudentPage } from '../dashboard/teacherDashboard/pages/EditStudentPage'
 export const PagesRoutes = () => {
   return (
     <Routes>
@@ -26,6 +27,7 @@ export const PagesRoutes = () => {
       <Route element={<ProtectedRoutes role='teacher'/>}>
         <Route path="/teacher/dashboard" element={<TeacherDashboardLayout />} >
           <Route index element={<TeacherDashboard />} />
+          <Route path="edit-student/:studentId" element={<EditStudentPage />} />
         </Route>
       </Route>
     </Routes>

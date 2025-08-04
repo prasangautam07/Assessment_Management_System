@@ -2,7 +2,6 @@ import React from "react";
 import { useAuth } from "../../utils/AuthContext";
 export const Profile = () => {
   const { user } = useAuth();
-  console.log("User in Profile component:", user);
   const formatted = new Date(user.dob).toLocaleDateString(); 
   return (
     <div className=" flex  justify-evenly gap-4 mt-10">

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 const localHost=false;
-const apiUrl = localHost ? 'http://localhost:3000/api' : 'https://assessment-management-system-3gj3.onrender.com/api';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const apiUrl = localHost ? 'http://localhost:3000/api' : baseUrl;
 
 export const validateUser = async (setUser) => {
   const token = localStorage.getItem('accessToken');

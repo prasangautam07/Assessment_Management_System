@@ -17,7 +17,8 @@ export const VerticalNavbar = ({role}) => {
                 <p className='flex justify-start text-[12px]'>{role}</p>
             </div>
         </div>
-        <div className="flex flex-col gap-2">
+        {user.role==="student" ?(
+          <div className="flex flex-col gap-2">
             <NavLink to="" className="flex items-center gap-2 p-2 font-semibold  hover:bg-gray-700 rounded-md">
               <UserCircle size={20} />
               <span>Profile</span>
@@ -27,6 +28,16 @@ export const VerticalNavbar = ({role}) => {
               <span>Results</span>
             </NavLink>
         </div>
+        ):
+        (
+          <div className="flex flex-col gap-2">
+            <NavLink to="" className="flex items-center gap-2 p-2 font-semibold  hover:bg-gray-700 rounded-md">
+              <UserCircle size={20} />
+              <span>Students</span>
+            </NavLink>
+        </div>
+        )
+        }      
     </div>
   )
 }
