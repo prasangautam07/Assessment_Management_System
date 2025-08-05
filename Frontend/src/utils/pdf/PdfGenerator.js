@@ -64,10 +64,10 @@ export const generateMarksheetPDF = (
   doc.text("Level:-", 14, infoStartY + lineSpacing);
   doc.text("Bachelor", 45, infoStartY + lineSpacing);
 
-  doc.text("Year/Part-", 14, infoStartY + lineSpacing * 2);
+  doc.text("Year/Part:-", 14, infoStartY + lineSpacing * 2);
   doc.text(yearPartMap[semester], 45, infoStartY + lineSpacing * 2);
 
-  doc.text("Programme:-", 14, infoStartY + lineSpacing * 3);
+  doc.text("Program:-", 14, infoStartY + lineSpacing * 3);
   doc.text(program, 45, infoStartY + lineSpacing * 3);
 
   // Right Column
@@ -81,10 +81,11 @@ export const generateMarksheetPDF = (
   // Table
   autoTable(doc, {
     startY: infoStartY + lineSpacing * 4 + 6,
-    head: [["SN", "Subject", "Marks", "Remarks"]],
+    head: [["SN", "Subject","Full Marks", "Obtained Marks", "Remarks"]],
     body: semesterData.map((item, index) => [
       index + 1,
       item.subject,
+      20,
       item.marks,
       item.marks >= 8 ? "Passed" : "Failed",
     ]),
