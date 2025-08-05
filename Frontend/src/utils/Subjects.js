@@ -24,12 +24,29 @@ export const SEMESTER_SUBJECTS = {
       "Electromagnetics",
     ],
     4: [
-      "Professional Communication",
-      "Database Management Systems",
-      "Applied Mechanics",
-      "Numerical Methods",
-      "Electrical Circuits",
-      "Digital Logic",
+      "Applied Mathematics",
+      "Numerical Method",
+      "Data Structure and Algorithm",
+      "Computer Graphics",
+      "Discrete Structure",
+      "Advanced Electronics"
+    ],
+    5: [
+      "Computer Network",
+      "Engineering Economics",
+      "Operating System",
+      "Fiter Design",
+      "Computer organization and Architecture",
+      "Database Management System"
+
+    ],
+
+    6: [
+     "Communication English",
+     "Embedded System",
+     "Antenna and Propagation",
+     "Minor Project",
+     "communication System"
     ],
   },
   BCT: {
@@ -90,3 +107,4 @@ export const SEMESTER_SUBJECTS = {
     ],
   },
 };
+
