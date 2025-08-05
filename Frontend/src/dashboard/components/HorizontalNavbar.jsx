@@ -9,8 +9,8 @@ export const HorizontalNavbar = ({role}) => {
   const { user } = useAuth();
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const handleLogOut = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("accessToken");
     navigate(`/${role}/login`);
   };
   return (
@@ -20,7 +20,7 @@ export const HorizontalNavbar = ({role}) => {
       </div>
       <div
         onClick={toggleDropdown}
-        className="flex items-center justify-end pr-4 text-gray-800 cursor-pointer hover:text-primary rounded-md px-2 py-1 transition"
+        className="flex items-center justify-end pr-4 text-gray-800 cursor-pointer hover:opacity-70 rounded-md px-2 py-1 transition"
       >
         <User className="mr-2" size={22} />
         <span className="font-semibold">{user.username}</span>

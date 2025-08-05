@@ -14,7 +14,7 @@ export const LoginForm = ({role}) => {
  const handlesubmit = async (e) => {
   e.preventDefault();
   setLoading(true); 
-  const success=await loginUser(username, password,setError,role);
+  const success=await loginUser(username.toUpperCase(), password,setError,role);
   setLoading(false); 
   if(success){
     Navigate(`/${role}/dashboard`);

@@ -13,10 +13,28 @@ export const RegisterForm = ({ role }) => {
   const [program, setProgram] = useState('');
   const [password, setPassword] = useState('');
 
+  const validateStudentUsername = (username) => {
+    return /^THA\d{3}[A-Z]{3}\d{3}$/.test(username);
+  };
+
   const handlesubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const success = await registerUser(email, username, program, password, setError);
+
+    // Only validate for student role
+    if (role === "student" && !validateStudentUsername(username.toUpperCase())) {
+      setError("Username must be in format: THA079BEI022");
+      setLoading(false);
+      return;
+    }
+
+    const success = await registerUser(
+      email,
+      username.toUpperCase(),
+      program.toUpperCase(),
+      password,
+      setError
+    );
     setLoading(false);
     if (success) {
       setEmail('');

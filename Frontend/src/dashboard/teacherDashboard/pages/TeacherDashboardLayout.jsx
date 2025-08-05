@@ -1,4 +1,3 @@
-// src/dashboard/layouts/DashboardLayout.jsx
 import { Outlet } from 'react-router-dom';
 import { VerticalNavbar } from '../../components/VerticalNavbar';
 import { HorizontalNavbar } from '../../components/HorizontalNavbar';

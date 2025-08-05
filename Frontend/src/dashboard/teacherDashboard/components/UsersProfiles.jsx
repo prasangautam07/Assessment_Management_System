@@ -42,7 +42,6 @@ export const TeacherDashboard = () => {
         Navigate(`/teacher/dashboard/edit-student/${studentId}`);
     };
 
-    // Filtering logic
     const filteredStudents = students.filter(student => {
         let programMatch = true;
         let yearMatch = true;
@@ -72,14 +71,10 @@ export const TeacherDashboard = () => {
         setCurrentPage(prev => (prev > 1 ? prev - 1 : prev));
     };
 
-    // Reset to first page when filters change
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProgram, selectedYear]);
 
-    if (isLoading) {
-        return <div className="p-8">Loading Students...</div>;
-    }
 
     return (
         <div className="flex flex-col bg-gray-50 p-2 sm:p-6 lg:p-4">
@@ -131,7 +126,7 @@ export const TeacherDashboard = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">{student.program}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">{student.category}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button onClick={() => handleEditClick(student.id)} className="text-indigo-600 hover:text-indigo-900 transition-colors duration-150 cursor-pointer"><Pencil /></button>
+                                        <button onClick={() => handleEditClick(student.id)} className="text-primary hover:opacity-80 transition-colors duration-150 cursor-pointer"><Pencil /></button>
                                     </td>
                                 </tr>
                             ))}

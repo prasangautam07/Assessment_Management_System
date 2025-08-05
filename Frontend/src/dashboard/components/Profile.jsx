@@ -18,14 +18,14 @@ export const Profile = () => {
     <div className="flex flex-col md:flex-row justify-evenly gap-8 mt-10 bg-gradient-to-r from-blue-50 to-indigo-50 min-h-[60vh] p-6">
       <div className="flex flex-col gap-8 w-full md:w-1/2">
         <div className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-primary flex flex-col items-start">
-          <h1 className="font-semibold text-2xl text-indigo-700 mb-2">Personal Information</h1>
+          <h1 className="font-semibold text-2xl  mb-2">Personal Information</h1>
           <hr className="my-4 w-full border-t-2 border-gray-200" />
           <div className="flex flex-col gap-3 text-gray-700 font-medium text-base">
-            <span className="flex items-center gap-2"><User size={18}/> Full Name: <span className="font-semibold text-indigo-600">{user.name}</span></span>
-            <span className="flex items-center gap-2"><Phone size={18}/> Contact: <span className="font-semibold text-indigo-600">{user.contact_no}</span></span>
-            <span className="flex items-center gap-2"><VenusAndMars size={18}/> Gender: <span className="font-semibold text-indigo-600">{user.gender}</span></span>
-            <span className="flex items-center gap-2"><Calendar size={18}/> Date Of Birth: <span className="font-semibold text-indigo-600">{formatted}</span></span>
-            <span className="flex items-center gap-2"><Tag size={18}/> Category: <span className="font-semibold text-indigo-600">{user.category}</span></span>
+            <span className="flex items-center gap-2"><User size={18}/> Full Name: <span className="font-semibold ">{user.name}</span></span>
+            <span className="flex items-center gap-2"><Phone size={18}/> Contact: <span className="font-semibold ">{user.contact_no}</span></span>
+            <span className="flex items-center gap-2"><VenusAndMars size={18}/> Gender: <span className="font-semibold ">{user.gender}</span></span>
+            <span className="flex items-center gap-2"><Calendar size={18}/> Date Of Birth: <span className="font-semibold ">{formatted}</span></span>
+            <span className="flex items-center gap-2"><Tag size={18}/> Category: <span className="font-semibold ">{user.category}</span></span>
           </div>
         </div>
       </div>

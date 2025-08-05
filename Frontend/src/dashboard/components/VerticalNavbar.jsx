@@ -8,8 +8,8 @@ export const VerticalNavbar = ({role}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const handleLogOut = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("accessToken");
     navigate(`/${role}/login`);
   }
   return (

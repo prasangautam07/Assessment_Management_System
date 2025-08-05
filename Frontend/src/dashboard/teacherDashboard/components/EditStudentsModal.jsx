@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SEMESTER_SUBJECTS } from "@utils/Subjects";
 
-
 export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
   const [formData, setFormData] = useState({
     ...student,
@@ -11,6 +10,7 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
   const [selectedSemester, setSelectedSemester] = useState(
     student.semester || 1
   );
+  const [errorMsg, setErrorMsg] = useState("");
 
   const program = student.program || "BEI";
   const subjectsForSelectedSemester =
@@ -53,6 +53,17 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const hasAnyMark = subjectsForSelectedSemester.some(
+      (subject) =>
+        formData.marks[subject] !== "" &&
+        formData.marks[subject] !== undefined &&
+        formData.marks[subject] !== null
+    );
+    if (!hasAnyMark) {
+      setErrorMsg("Please enter marks for at least one subject before submitting.");
+      return;
+    }
+    setErrorMsg("");
     onSave(formData);
   };
 
@@ -151,24 +162,30 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
             )}
           </div>
 
-          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 sticky bottom-0 bg-white">
+          {errorMsg && (
+            <div className="text-red-600 text-sm mt-4 mb-2 text-center">
+              {errorMsg}
+            </div>
+          )}
+
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-gray-200 sticky bottom-0 bg-white">
             <button
               type="button"
               onClick={onClose}
-              className="px-2 mt-4  cursor-pointer bg-red-700 text-white rounded-md hover:opacity-60 transition-colors"
+              className="px-2 mt-4 cursor-pointer bg-red-700 text-white rounded-md hover:opacity-60 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className={`bg-primary text-white rounded-md p-2 mt-4 cursor-pointer transition-transform duration-600 ${
-                loading ? "opacity-60" : "hover:opacity-80 hover:scale-[1.02]"
+              className={`bg-primary text-white rounded-md p-2 mt-4 cursor-pointer transition-transform duration-600 flex items-center justify-center min-w-[120px] ${
+                loading ? "opacity-60" : "hover:opacity-80 hover:scale-[1]"
               }`}
               disabled={loading}
             >
               {loading && (
                 <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  className="animate-spin h-5 w-5 text-white mr-2"
                   viewBox="0 0 24 24"
                 >
                   <circle

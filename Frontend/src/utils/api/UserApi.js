@@ -5,7 +5,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const apiUrl = localHost ? 'http://localhost:3000/api' : baseUrl;
 
 export const validateUser = async (setUser) => {
-  const token = localStorage.getItem('accessToken');
+  const token = sessionStorage.getItem('accessToken');
   if (!token) {
     console.error('No access token found in localStorage');
     return null;
@@ -44,7 +44,7 @@ export const loginUser= async (username, password,setError,role)=>{
 
     const accessToken = res.data.accessToken;
     if (accessToken) {
-      localStorage.setItem('accessToken', accessToken);
+      sessionStorage.setItem('accessToken', accessToken);
       console.log('Login successful!');
       toast.success('Login successful!');
       return(true);
