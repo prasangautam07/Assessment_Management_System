@@ -1,20 +1,21 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { Lock, Key, Eye, EyeOff } from 'lucide-react'
 import { loginUser } from '../../utils/api/UserApi'
 
 
 export const LoginForm = ({role}) => {
     const [showPassword, setShowPassword] = useState(false);
-    const[error, setError] = useState(null);
-    const[password, setPassword] = useState('');
-    const[username, setUsername] = useState('');
-    const Navigate=useNavigate();
+    const [error, setError] = useState(null);
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [loading, setLoading] = useState(false); 
+    const Navigate = useNavigate();
  const handlesubmit = async (e) => {
   e.preventDefault();
+  setLoading(true); 
   const success=await loginUser(username, password,setError,role);
+  setLoading(false); 
   if(success){
     Navigate(`/${role}/dashboard`);
   }
@@ -65,7 +66,19 @@ export const LoginForm = ({role}) => {
             </div>
           </div>
           <div className='flex items-center w-full mx-auto'>
-            <button type="submit" className='bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-90 hover:scale-[1.02] transition-transform duration-600'>Login</button>
+            <button
+              type="submit"
+              className={`bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto transition-transform duration-600 flex items-center justify-center ${loading ? 'opacity-60' : 'hover:opacity-90 hover:scale-[1.02]'}`}
+              disabled={loading}
+            >
+              {loading && (
+                <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                </svg>
+              )}
+              {loading ? "Logging in..." : "Login"}
+            </button>
           </div>
         </form>
         {role==='student' && (

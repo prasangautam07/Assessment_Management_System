@@ -5,6 +5,7 @@ import { registerUser } from '../../utils/api/UserApi';
 export const RegisterForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Form fields state
   const [email, setEmail] = useState('');
@@ -12,26 +13,26 @@ export const RegisterForm = ({ role }) => {
   const [program, setProgram] = useState('');
   const [password, setPassword] = useState('');
 
-const handlesubmit = async (e) => {
-  e.preventDefault();
-  const success = await registerUser(email, username, program, password, setError);
-  if (success) {
-    // Reset form fields on successful registration
-    setEmail('');
-    setUsername('');
-    setProgram('');
-    setPassword('');
-    setError('');
-  }
-};
-
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const success = await registerUser(email, username, program, password, setError);
+    setLoading(false);
+    if (success) {
+      setEmail('');
+      setUsername('');
+      setProgram('');
+      setPassword('');
+      setError('');
+    }
+  };
 
   return (
     <div className='flex flex-col items-center justify-center gap-4'>
       <div>
         <h1 className='font-bold text-2xl mb-1'>Signup</h1>
         <p>Enter your details to signup.</p>
-         <p className={`'text-sm text-red-600' ${error ? 'text-red-600 opacity-100' : 'opacity-0'}`}>{error || 'p'}</p>
+        <p className={`'text-sm text-red-600' ${error ? 'text-red-600 opacity-100' : 'opacity-0'}`}>{error || 'p'}</p>
       </div>
       <form className='flex flex-col gap-4 w-full' onSubmit={handlesubmit}>
         <div className='flex flex-col items-start gap-2'>
@@ -102,9 +103,16 @@ const handlesubmit = async (e) => {
         <div className='flex items-center w-full mx-auto'>
           <button
             type='submit'
-            className='bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto hover:opacity-80 hover:scale-[1.02] transition-transform duration-600'
+            className={`bg-primary text-white rounded-md p-2 mt-4 cursor-pointer w-70 mx-auto transition-transform duration-600 flex items-center justify-center ${loading ? 'opacity-60' : 'hover:opacity-80 hover:scale-[1.02]'}`}
+            disabled={loading}
           >
-            Signup
+            {loading && (
+              <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+              </svg>
+            )}
+            {loading ? "Signing up..." : "Signup"}
           </button>
         </div>
       </form>

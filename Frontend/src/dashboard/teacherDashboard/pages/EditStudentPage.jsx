@@ -7,6 +7,7 @@ import { addStudentMarks } from '../../../utils/api/TeacherApi';
 export const EditStudentPage = () => {
 
     const [initialStudents, setInitialStudents] = useState([]);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchStudents = async () => {
             const studentsData = await getAllStudents();
@@ -22,7 +23,8 @@ export const EditStudentPage = () => {
         navigate('/teacher/dashboard'); 
     };
 
-    const handleSave = (updatedStudent) => {
+    const handleSave = async (updatedStudent) => {
+        setLoading(true);
         const updatedStudentsData=[{
             name: updatedStudent.name,
             username: updatedStudent.roll,
@@ -31,7 +33,8 @@ export const EditStudentPage = () => {
             semester: updatedStudent.semester
         }]
         console.log("Updated students data:", updatedStudentsData);
-        addStudentMarks(updatedStudentsData);
+        const res = await addStudentMarks(updatedStudentsData);
+        setLoading(false);
         navigate('/teacher/dashboard');
     };
 
@@ -51,6 +54,7 @@ export const EditStudentPage = () => {
             student={studentToEdit}
             onClose={handleClose}
             onSave={handleSave}
+            loading={loading}
         />
     );
 };

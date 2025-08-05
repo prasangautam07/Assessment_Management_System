@@ -1,8 +1,6 @@
 import { PagesRoutes } from "./routes/Routes.jsx";
 import { ToastContainer } from 'react-toastify'
-const baseUrl = import.meta.env.VITE_API_BASE_URL
 function App() {
- console.log(baseUrl)
   return (
     <>
       <PagesRoutes />

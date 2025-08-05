@@ -66,7 +66,7 @@ export const loginUser = async (req, res) => {
           id: user.id,
             },
         },
-      "gsdkjghosdobg", // PROCESS.ENV.JWT_SECRET
+      process.env.JWT_SECRET, // PROCESS.ENV.JWT_SECRET
         {
         expiresIn: "20m",
         }
@@ -98,7 +98,10 @@ export const validateUser = async (req, res) => {
     );
   }else if(role==='teacher'){
    result = await db.query(
-      'SELECT email, username,role FROM users WHERE username = $1',
+      `SELECT users.username,users.role,teacherData.name,teacherData.gender
+       FROM users
+       LEFT JOIN teacherData ON users.username = teacherData.username
+       WHERE users.username = $1`,
       [username]
     );
     }

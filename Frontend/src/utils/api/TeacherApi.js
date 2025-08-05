@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 const localHost=false;
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const apiUrl = localHost ? 'http://localhost:3000/api' : baseUrl;
@@ -26,6 +27,7 @@ export const addStudentMarks=async (data) => {
             semester
         });
         console.log('Added student marks:', res.data);
+        toast.success('Marks added successfully!');
         return res.data;
     } catch (error) {
         console.error('Error adding student marks:', error);

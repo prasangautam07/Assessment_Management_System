@@ -35,7 +35,7 @@ export const VerticalNavbar = ({role}) => {
               <UserCircle size={20} />
               <span>Students</span>
             </NavLink>
-        </div>
+         </div>
         )
         }      
     </div>
