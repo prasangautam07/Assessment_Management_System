@@ -84,16 +84,46 @@ export const ResultsPage = () => {
                   <td className="p-3 border">Bachelor</td>
                   <td className="p-3 border">{program}</td>
                   <td className="p-3 border">{formatYearPart(semester)}</td>
-                  <td
-                    className={`p-3 ${
-                      remarks ? "text-green-500" : "text-red-500"
-                    }`}
-                  >
-                    {remarks ? "Passed" : "Failed"}
+                  <td className="p-3 border">
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                        remarks
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {remarks ? (
+                        <>
+                          <svg
+                            className="w-4 h-4 inline"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M5 13l4 4L19 7" />
+                          </svg>
+                          Passed
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            className="w-4 h-4 inline"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          Failed
+                        </>
+                      )}
+                    </span>
                   </td>
                   <td className="p-3 border">
                     <button
-                      className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-3 py-1 rounded text-sm"
+                      className="flex items-center cursor-pointer gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded shadow transition-all duration-150"
                       onClick={() => {
                         generateMarksheetPDF(
                           user.username,
@@ -104,8 +134,8 @@ export const ResultsPage = () => {
                         );
                       }}
                     >
-                      <FileText size={16} />
-                      Download Marksheet
+                      <FileText size={18} />
+                      <span className="font-medium">Download Marksheet</span>
                     </button>
                   </td>
                 </tr>

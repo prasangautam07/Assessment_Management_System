@@ -7,31 +7,35 @@ export const HorizontalNavbar = ({role}) => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user } = useAuth();
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
-  };
+  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const handleLogOut = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     navigate(`/${role}/login`);
-  }
+  };
   return (
-    <div className="bg-white h-15 flex items-center justify-end relative">
+    <div className="bg-white h-15 flex items-center justify-end relative shadow-sm border-b border-gray-200">
       <div className="flex items-center justify-end w-full pr-4">
         <p className="text-[#888888]">Welcome, {user.name}</p>
       </div>
       <div
         onClick={toggleDropdown}
-        className="flex items-center justify-end pr-4 text-gray-800 cursor-pointer hover:text-gray-500 rounded-md px-2 py-1"
+        className="flex items-center justify-end pr-4 text-gray-800 cursor-pointer hover:text-primary rounded-md px-2 py-1 transition"
       >
-        <User className="" size={20} />
-        <p>{user.username}</p>
-        <ChevronDown className=" ml-1" size={16} />
+        <User className="mr-2" size={22} />
+        <span className="font-semibold">{user.username}</span>
+        <ChevronDown className="ml-1" size={16} />
       </div>
       {isDropdownOpen && (
-        <div className="absolute top-12 right-4 h-22 flex flex-col items-center justify-center p-4 bg-white card-shadow">
-          <p className="mt-3 mb-4 font-sm">{user.name}</p>
-          <button onClick={handleLogOut} className="text-gray-500 mb-4 pt-2 cursor-pointer w-full border-t-2">Logout</button>
+        <div className="absolute top-12 right-4 min-w-[160px] flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+          <p className="mb-2 font-semibold text-gray-800">{user.name}</p>
+          <hr className="w-full my-2 border-gray-200" />
+          <button
+            onClick={handleLogOut}
+            className="text-primary font-semibold py-2 w-full rounded hover:bg-green-50 transition"
+          >
+            Logout
+          </button>
         </div>
       )}
     </div>
