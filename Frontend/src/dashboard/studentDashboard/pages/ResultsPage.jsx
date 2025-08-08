@@ -1,4 +1,3 @@
-// ExamScheduleTable.jsx
 import { FileText } from "lucide-react";
 import { getStudentMarks } from "../../../utils/api/UsersMarksApi";
 import { useEffect, useState } from "react";
@@ -72,74 +71,82 @@ export const ResultsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(testexamData).map((semesterKey, index) => {
-              const semester = parseInt(semesterKey);
+            {Object.keys(testexamData).length === 0 ? (
+              <tr>
+                <td colSpan="6" className="text-center py-4 text-gray-500">
+                  No results found.
+                </td>
+              </tr>
+            ) : (
+              Object.keys(testexamData).map((semesterKey, index) => {
+                const semester = parseInt(semesterKey);
+                const semesterData = testexamData[semesterKey];
+                const remarks = checkPassed(semesterData);
 
-              let remarks = checkPassed(testexamData[semesterKey]);
-
-              return (
-                <tr key={semester} className="border-b">
-                  <td className="p-3 border">{index + 1}</td>
-                  <td className="p-3 border">Bachelor</td>
-                  <td className="p-3 border">{program}</td>
-                  <td className="p-3 border">{formatYearPart(semester)}</td>
-                  <td className="p-3 border">
-                    <span
-                      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
-                        remarks
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {remarks ? (
-                        <>
-                          <svg
-                            className="w-4 h-4 inline"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M5 13l4 4L19 7" />
-                          </svg>
-                          Passed
-                        </>
-                      ) : (
-                        <>
-                          <svg
-                            className="w-4 h-4 inline"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                          Failed
-                        </>
-                      )}
-                    </span>
-                  </td>
-                  <td className="p-3 border">
-                    <button
-                      className="flex items-center cursor-pointer gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded shadow transition-all duration-150"
-                      onClick={() => {
-                        generateMarksheetPDF(
-                          user.username,
-                          program,
-                          semester,
-                          testexamData[semesterKey],
-                          user.name
-                        );
-                      }}
-                    >
-                      <FileText size={18} />
-                      <span className="font-medium">Download Marksheet</span>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                return (
+                  <tr key={semester} className="border-b">
+                    <td className="p-3 border">{index + 1}</td>
+                    <td className="p-3 border">Bachelor</td>
+                    <td className="p-3 border">{program}</td>
+                    <td className="p-3 border">{formatYearPart(semester)}</td>
+                    <td className="p-3 border">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                          remarks
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {remarks ? (
+                          <>
+                            <svg
+                              className="w-4 h-4 inline"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" />
+                            </svg>
+                            Passed
+                          </>
+                        ) : (
+                          <>
+                            <svg
+                              className="w-4 h-4 inline"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Failed
+                          </>
+                        )}
+                      </span>
+                    </td>
+                    <td className="p-3 border">
+                      <button
+                        className="flex items-center cursor-pointer gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded shadow transition-all duration-150"
+                        onClick={() => {
+                          generateMarksheetPDF(
+                            user.username,
+                            program,
+                            semester,
+                            semesterData,
+                            user.name
+                          );
+                        }}
+                      >
+                        <FileText size={18} />
+                        <span className="font-medium">Download Marksheet</span>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
