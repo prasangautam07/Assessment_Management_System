@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { loginUser,registerUser,validateUser} from '../controller/usercontroller.js';
+import { loginUser,registerUser,validateUser,userAvatarUpload} from '../controller/usercontroller.js';
 import validateToken from '../middleware/authorization.js';
 
 
@@ -65,6 +65,8 @@ router.post('/login', loginUser);
  *         description: Server error
  */
 router.get('/validate', validateToken, validateUser);
+
+router.post('/upload-avatar',userAvatarUpload);
 
 
 

@@ -8,9 +8,10 @@ export const getAllStudents= async () => {
   const result = await db.query(
       `SELECT users.id, users.username, users.program,users.role,
               studentData.name, studentData.roll, studentData.dob,
-               studentData.category
+               studentData.category,userimage.imageurl
        FROM users
        LEFT JOIN studentData ON users.username = studentData.roll
+       LEFT JOIN userimage ON users.id = userimage.user_id
        WHERE users.role = $1`,
       ['student']
     );

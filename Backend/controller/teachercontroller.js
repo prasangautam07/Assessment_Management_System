@@ -15,7 +15,6 @@ export const getAllStudentsController = async (req, res) => {
 export const addStudentMarksController = async (req, res) => {
   try {
     const data = req.body;  
-    console.log("Received data in controller:", data);
     const result = await addStudentMarks(data);
     if (result) {
       res.status(200).json({ message: "Student marks added successfully" });

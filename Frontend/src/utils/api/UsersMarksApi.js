@@ -1,7 +1,7 @@
 import axios from "axios";
-const localHost=false;
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
-const apiUrl = localHost ? 'http://localhost:3000/api' : baseUrl;
+//const apiUrl = localHost ? 'http://localhost:3000/api' : baseUrl;
+const apiUrl = baseUrl;
 
 export const getStudentMarks= async (username) => {
     try {
@@ -11,7 +11,6 @@ export const getStudentMarks= async (username) => {
         if (!grouped[semester]) grouped[semester] = [];
         grouped[semester].push({ subject, marks,semester });
         });
-        console.log('Fetched student marks:', grouped);
         return grouped;
     } catch (error) {
         console.error('Error fetching student marks:', error);

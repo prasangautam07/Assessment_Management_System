@@ -1,16 +1,25 @@
-import { User, Phone, Calendar, Tag,VenusAndMars } from "lucide-react";
+import { User, Phone, Calendar, Tag, VenusAndMars } from "lucide-react";
 import React, { useState } from "react";
 import { useAuth } from "../../utils/AuthContext";
+import { UploadUserAvatar,uploadToCloudinary } from "../../utils/api/UserApi";
 
 export const Profile = () => {
   const { user } = useAuth();
   const formatted = new Date(user.dob).toLocaleDateString();
-  const [avatar, setAvatar] = useState("https://www.w3schools.com/howto/img_avatar.png");
+  const [avatar, setAvatar] = useState(user.imageurl || "https://www.w3schools.com/howto/img_avatar.png");
+  const [uploading, setUploading] = useState(false);
 
-  const handleAvatarChange = (e) => {
+
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setAvatar(URL.createObjectURL(file));
+      setUploading(true);
+      const res =await uploadToCloudinary(file);
+      if (res) {
+        await UploadUserAvatar(res, user.username);
+        setAvatar(res);
+      }
+      setUploading(false);
     }
   };
 
@@ -30,7 +39,7 @@ export const Profile = () => {
         </div>
       </div>
       <div className="flex flex-col gap-8 w-full md:w-1/2 items-center">
-        <div className="flex flex-col items-center bg-white rounded-xl shadow-lg p-6 border-t-4 border-primary w-full max-w-xs">
+        <div className={`flex flex-col items-center bg-white rounded-xl shadow-lg p-6 border-t-4 border-primary w-full max-w-xs transition-opacity duration-300 ${uploading ? "opacity-50 pointer-events-none" : ""}`}>
           <div className="relative">
             <img
               src={avatar}
@@ -43,6 +52,7 @@ export const Profile = () => {
                 accept="image/*"
                 className="hidden"
                 onChange={handleAvatarChange}
+                disabled={uploading}
               />
               <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" /></svg>
             </label>

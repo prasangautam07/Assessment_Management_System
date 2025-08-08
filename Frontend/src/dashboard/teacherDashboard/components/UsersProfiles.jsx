@@ -3,18 +3,27 @@ import { Pencil } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getAllStudents } from '@utils/api/TeacherApi';
 
-const StudentInfoCell = ({ name }) => (
-    <div className="flex items-center">
-        <div className="flex-shrink-0 w-10 h-10">
-            <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-600">
-                {name && name.charAt(0)}
-            </div>
+const StudentInfoCell = ({ name, imageurl }) => (
+  <div className="flex items-center">
+    <div className="flex-shrink-0 w-10 h-10">
+      {imageurl ? (
+        <img
+          className="w-10 h-10 rounded-full object-cover"
+          src={imageurl}
+          alt={name}
+        />
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-600">
+          {name && name.charAt(0).toUpperCase()}
         </div>
-        <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900">{name}</div>
-        </div>
+      )}
     </div>
+    <div className="ml-4">
+      <div className="text-sm font-medium text-gray-900">{name}</div>
+    </div>
+  </div>
 );
+
 
 export const TeacherDashboard = () => {
     const [students, setStudents] = useState([]);
@@ -52,7 +61,7 @@ export const TeacherDashboard = () => {
             yearMatch = student.username && student.username.slice(3, 6) === selectedYear;
         }
         return programMatch && yearMatch;
-    });
+    }).sort((a, b) => a.name.localeCompare(b.name));
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -121,7 +130,7 @@ export const TeacherDashboard = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {currentStudents.map((student, index) => (
                                 <tr key={`${student.id}-${index}`} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap"><StudentInfoCell name={student.name} /></td>
+                                    <td className="px-6 py-4 whitespace-nowrap"><StudentInfoCell name={student.name} imageurl={student.imageurl} /></td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-start">2{getAcademic_year(student.username)}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">{student.program}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">{student.category}</td>

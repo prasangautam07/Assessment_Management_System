@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-const localHost=false;
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
-const apiUrl = localHost ? 'http://localhost:3000/api' : baseUrl;
+const apiUrl = baseUrl;
 
 export const validateUser = async (setUser) => {
   const token = sessionStorage.getItem('accessToken');
@@ -10,7 +9,6 @@ export const validateUser = async (setUser) => {
     console.error('No access token found in localStorage');
     return null;
   }
-  console.log('Validating user with token:', token);
 
   try {
     const response = await axios.get(`${apiUrl}/users/validate`, {
@@ -19,10 +17,8 @@ export const validateUser = async (setUser) => {
       },
     });
 
-    console.log('User validated:', response);
     if (setUser) {
       setUser(response.data.user);
-      console.log('User set in context:', response.data.user);
     }
     return response.data;
 
@@ -45,7 +41,6 @@ export const loginUser= async (username, password,setError,role)=>{
     const accessToken = res.data.accessToken;
     if (accessToken) {
       sessionStorage.setItem('accessToken', accessToken);
-      console.log('Login successful!');
       toast.success('Login successful!');
       return(true);
     } else {
@@ -75,18 +70,48 @@ export const registerUser = async (email, username, program, password ,setError)
       }
     );
 
-    console.log('Registration successful:', res.data);
     toast.success('User successfully registered!');
     return true;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
-      console.log(`Error: ${error.response.data.message}`);
       setError(error.response.data.message);
         return false;
     } else {
-      console.log(`Server error: ${error.message || 'Please try again later.'}`);
       setError('Registration failed. Please try again later.');
         return false;
     }
   }
 }
+
+export const UploadUserAvatar = async (avatarUrl,username) => {
+  try {
+    const res = await axios.post(`${apiUrl}/users/upload-avatar`, {avatarUrl,username});
+  } catch (error) {
+    console.error('Error uploading avatar:', error);
+    throw error;
+  }
+};
+
+
+export const uploadToCloudinary = async (file) => {
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+  const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      return data.secure_url;
+    } else {
+      throw new Error('Failed to upload file to Cloudinary');
+    }
+  } catch (error) {
+    console.error('Error uploading file to Cloudinary:', error);
+    throw error;
+  }
+};

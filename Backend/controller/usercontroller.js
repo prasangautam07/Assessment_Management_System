@@ -66,7 +66,7 @@ export const loginUser = async (req, res) => {
           id: user.id,
             },
         },
-      process.env.JWT_SECRET, // PROCESS.ENV.JWT_SECRET
+      process.env.JWT_SECRET,
         {
         expiresIn: "20m",
         }
@@ -75,7 +75,6 @@ export const loginUser = async (req, res) => {
       accessToken,
     });
   } else {
-    console.log(`Login failed: Invalid username or password for ${username}`);
     res.status(401).json({ message: "Invalid username or password" });
   }
 };
@@ -84,15 +83,15 @@ export const validateUser = async (req, res) => {
   const db = await connectToDatabase();
   const username = req.user.username;
   const role = await getUserByUsername(username).then(user => user.role);
-  console.log(`Validating user: ${username} with role: ${role}`);
   let result;
   if(role==='student'){
    result = await db.query(
       `SELECT users.id, users.email, users.username, users.program,users.role,
               studentData.name, studentData.roll, studentData.contact_no,
-              studentData.gender, studentData.dob, studentData.category
+              studentData.gender, studentData.dob, studentData.category,userimage.imageurl
        FROM users
        LEFT JOIN studentData ON users.username = studentData.roll
+       LEFT JOIN userimage ON users.id = userimage.user_id
        WHERE users.username = $1`,
       [username]
     );
@@ -109,6 +108,45 @@ export const validateUser = async (req, res) => {
   if (result.rows.length === 0) {
     return res.status(404).json({ message: "User not found" });
   }
-  console.log(`User validated: ${result.rows[0]}`);
   return res.status(200).json({ user: result.rows[0] });
+};
+
+export const userAvatarUpload = async (req, res) => {
+  const { avatarUrl, username } = req.body; 
+  if (!avatarUrl || !username) {
+    return res.status(400).json({ message: "Avatar URL and username are required" });
+  }
+  const db = await connectToDatabase();
+  try {
+    const userResult = await db.query(
+      `SELECT id FROM users WHERE username = $1`,
+      [username]
+    );
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const userId = userResult.rows[0].id;
+
+    const imgResult = await db.query(
+      `SELECT * FROM userimage WHERE user_id = $1`,
+      [userId]
+    );
+
+    let result;
+    if (imgResult.rows.length > 0) {
+      result = await db.query(
+        `UPDATE userimage SET imageurl = $1 WHERE user_id = $2 RETURNING *`,
+        [avatarUrl, userId]
+      );
+    } else {
+      result = await db.query(
+        `INSERT INTO userimage (imageurl, user_id) VALUES ($1, $2) RETURNING *`,
+        [avatarUrl, userId]
+      );
+    }
+    return res.status(200).json({ message: "Avatar saved successfully", userImage: result.rows[0] });
+  } catch (error) {
+    console.error("Error saving avatar:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };

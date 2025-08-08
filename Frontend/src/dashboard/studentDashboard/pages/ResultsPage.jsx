@@ -46,7 +46,6 @@ export const ResultsPage = () => {
     const getUserMarks = async () => {
       const userMarks = await getStudentMarks(username);
       setExamData(userMarks);
-      console.log("User Marks:", userMarks);
     };
     getUserMarks();
   }, []);
