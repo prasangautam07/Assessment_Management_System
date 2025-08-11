@@ -19,7 +19,8 @@ export const EditStudentPage = () => {
     const navigate = useNavigate();
     const studentToEdit = initialStudents.find(s => s.id == studentId);
 
-    const handleClose = () => {
+    const handleClose = (e) => {
+        e.preventDefault();
         navigate('/teacher/dashboard'); 
     };
 
@@ -32,9 +33,9 @@ export const EditStudentPage = () => {
             program: updatedStudent.program,
             semester: updatedStudent.semester
         }]
-        console.log("Updated students data:", updatedStudentsData);
         const res = await addStudentMarks(updatedStudentsData);
         setLoading(false);
+        event.preventDefault();
         navigate('/teacher/dashboard');
     };
 

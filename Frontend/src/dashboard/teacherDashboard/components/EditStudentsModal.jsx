@@ -2,14 +2,9 @@ import React, { useState, useEffect } from "react";
 import { SEMESTER_SUBJECTS } from "@utils/Subjects";
 
 export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
-  const [formData, setFormData] = useState({
-    ...student,
-    marks: student.marks || {},
-    semester: student.semester,
-  });
-  const [selectedSemester, setSelectedSemester] = useState(
-    student.semester || 1
-  );
+  const [allMarks, setAllMarks] = useState(student.marks || {});
+  const [selectedSemester, setSelectedSemester] = useState(student.semester || 1);
+  const [marksForSemester, setMarksForSemester] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
 
   const program = student.program || "BEI";
@@ -19,52 +14,48 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
       : [];
 
   useEffect(() => {
-    setFormData({
-      ...student,
-      marks: student.marks || {},
-    });
+    setAllMarks(student.marks || {});
     setSelectedSemester(student.semester || 1);
   }, [student]);
 
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      semester: selectedSemester,
-    }));
-  }, [selectedSemester]);
-
-  const handleFieldChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    setMarksForSemester(allMarks[String(selectedSemester)] || {});
+  }, [selectedSemester]); 
 
   const handleMarkChange = (e) => {
     const { value } = e.target;
     const subjectName = e.target.dataset.subject;
-
-    setFormData((prev) => ({
-      ...prev,
-      marks: {
-        ...prev.marks,
+    setMarksForSemester((prev) => {
+      const updated = {
+        ...prev,
         [subjectName]: value === "" ? "" : Number(value),
-      },
-    }));
+      };
+      setAllMarks((prevAll) => ({
+        ...prevAll,
+        [String(selectedSemester)]: updated,
+      }));
+      return updated;
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const hasAnyMark = subjectsForSelectedSemester.some(
       (subject) =>
-        formData.marks[subject] !== "" &&
-        formData.marks[subject] !== undefined &&
-        formData.marks[subject] !== null
+        marksForSemester[subject] !== "" &&
+        marksForSemester[subject] !== undefined &&
+        marksForSemester[subject] !== null
     );
     if (!hasAnyMark) {
       setErrorMsg("Please enter marks for at least one subject before submitting.");
       return;
     }
     setErrorMsg("");
-    onSave(formData);
+    onSave({
+      ...student,
+      marks: allMarks,
+      semester: selectedSemester,
+    });
   };
 
   return (
@@ -83,7 +74,7 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
               <input
                 type="text"
                 name="name"
-                value={formData.name}
+                value={student.name}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               />
@@ -94,8 +85,8 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
               </label>
               <input
                 type="text"
-                name="name"
-                value={formData.program}
+                name="program"
+                value={student.program}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               />
@@ -145,7 +136,7 @@ export const EditStudentsModal = ({ student, onClose, onSave, loading }) => {
                       type="number"
                       id={subject}
                       data-subject={subject}
-                      value={formData.marks[subject] || ""}
+                      value={marksForSemester[subject] || ""}
                       onChange={handleMarkChange}
                       placeholder="Not graded"
                       min="0"
