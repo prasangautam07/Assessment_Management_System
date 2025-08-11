@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getAllStudents } from "@utils/api/TeacherApi";
+import { Spinner } from "../../components/Spinner";
 
 const StudentInfoCell = ({ name, imageurl }) => (
   <div className="flex items-center">
@@ -101,26 +102,13 @@ export const TeacherDashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedProgram) sessionStorage.setItem("selectedProgram", selectedProgram);
+    if (selectedProgram)
+      sessionStorage.setItem("selectedProgram", selectedProgram);
   }, [selectedProgram]);
 
   useEffect(() => {
     if (selectedYear) sessionStorage.setItem("selectedYear", selectedYear);
   }, [selectedYear]);
-
-  if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
-                    <svg className="animate-spin h-8 w-8 text-primary mb-4" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-                    </svg>
-                    <span className="font-semibold">Loading...</span>
-                </div>
-            </div>
-        );
-    }
   return (
     <div className="flex flex-col bg-gray-50 p-2 sm:p-6 lg:p-4">
       <div className="flex justify-evenly items-center mb-6">
@@ -191,33 +179,43 @@ export const TeacherDashboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentStudents.map((student, index) => (
-                <tr key={`${student.id}-${index}`} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <StudentInfoCell
-                      name={student.name}
-                      imageurl={student.imageurl}
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-start">
-                    2{getAcademic_year(student.username)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">
-                    {student.program}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">
-                    {student.category}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => handleEditClick(student.id)}
-                      className="text-primary hover:opacity-80 transition-colors duration-150 cursor-pointer"
-                    >
-                      <Pencil />
-                    </button>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="flex items-center justify-center min-h-[100px] bg-none">
+                      <Spinner />
+                    </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                currentStudents.map((student, index) => (
+                  <tr key={`${student.id}-${index}`} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <StudentInfoCell
+                        name={student.name}
+                        imageurl={student.imageurl}
+                      />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-start">
+                      2{getAcademic_year(student.username)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">
+                      {student.program}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-left">
+                      {student.category}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onClick={() => handleEditClick(student.id)}
+                        className="text-primary hover:opacity-80 transition-colors duration-150 cursor-pointer"
+                      >
+                        <Pencil />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
