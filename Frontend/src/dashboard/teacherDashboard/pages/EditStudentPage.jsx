@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { EditStudentsModal } from '../components/EditStudentsModal'; 
 import { getAllStudents } from '../../../utils/api/TeacherApi';
 import { addStudentMarks } from '../../../utils/api/TeacherApi';
-import { Spinner } from '../../components/Spinner';
 
 export const EditStudentPage = () => {
     const [initialStudents, setInitialStudents] = useState([]);
