@@ -49,10 +49,10 @@ export const loginUser= async (username, password,setError,role)=>{
     }
   } catch (error) {
     // Error handling
-    toast.error('Server error.');
     if (error.response && error.response.data && error.response.data.message) {
       console.error(`Login error: ${error.response.data.message}`);
-      setError("Server error. Please try again later.");
+      toast.error(error.response.data.message);
+      setError(error.response.data.message);
     } else {
       console.error('Unexpected error:', error);
       setError('Server error. Please try again later.');
